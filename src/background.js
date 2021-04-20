@@ -1,5 +1,5 @@
 'use strict'
-
+const path = require('path')
 import { app, protocol, BrowserWindow, Menu } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
@@ -12,8 +12,9 @@ async function createWindow() {
   // Create the browser window.
   Menu.setApplicationMenu(null)
   const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1200,
+    height: 800,
+    icon: path.join(__dirname, '../favicon.ico'),
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
@@ -50,7 +51,7 @@ app.on('activate', () => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', async() => {
+app.on('ready', async () => {
   if (isDevelopment && !process.env.IS_TEST) {
     // Install Vue Devtools
     try {

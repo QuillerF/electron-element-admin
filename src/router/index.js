@@ -136,7 +136,7 @@ export const asyncRoutes = [
     alwaysShow: true, // will always show the root menu
     name: 'Permission',
     meta: {
-      title: '鉴权',
+      title: '用户管理',
       icon: 'lock',
       roles: ['admin', 'editor'] // you can set roles in root nav
     },
@@ -162,9 +162,9 @@ export const asyncRoutes = [
       {
         path: 'role',
         component: () => import('@/views/permission/role'),
-        name: '角色鉴权',
+        name: '添加用户',
         meta: {
-          title: 'Role Permission',
+          title: '添加用户',
           roles: ['admin']
         }
       }
@@ -235,43 +235,43 @@ export const asyncRoutes = [
   //   ]
   // },
 
-  {
-    path: '/error',
-    component: Layout,
-    redirect: 'noRedirect',
-    name: 'ErrorPages',
-    meta: {
-      title: 'Error Pages',
-      icon: '404'
-    },
-    children: [
-      {
-        path: '401',
-        component: () => import('@/views/error-page/401'),
-        name: 'Page401',
-        meta: { title: '401', noCache: true }
-      },
-      {
-        path: '404',
-        component: () => import('@/views/error-page/404'),
-        name: 'Page404',
-        meta: { title: '404', noCache: true }
-      }
-    ]
-  },
+  // {
+  //   path: '/error',
+  //   component: Layout,
+  //   redirect: 'noRedirect',
+  //   name: 'ErrorPages',
+  //   meta: {
+  //     title: 'Error Pages',
+  //     icon: '404'
+  //   },
+  //   children: [
+  //     {
+  //       path: '401',
+  //       component: () => import('@/views/error-page/401'),
+  //       name: 'Page401',
+  //       meta: { title: '401', noCache: true }
+  //     },
+  //     {
+  //       path: '404',
+  //       component: () => import('@/views/error-page/404'),
+  //       name: 'Page404',
+  //       meta: { title: '404', noCache: true }
+  //     }
+  //   ]
+  // },
 
-  {
-    path: '/error-log',
-    component: Layout,
-    children: [
-      {
-        path: 'log',
-        component: () => import('@/views/error-log/index'),
-        name: 'ErrorLog',
-        meta: { title: 'Error Log', icon: 'bug' }
-      }
-    ]
-  },
+  // {
+  //   path: '/error-log',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'log',
+  //       component: () => import('@/views/error-log/index'),
+  //       name: 'ErrorLog',
+  //       meta: { title: 'Error Log', icon: 'bug' }
+  //     }
+  //   ]
+  // },
 
   {
     path: '/excel',
@@ -359,18 +359,18 @@ export const asyncRoutes = [
   //   ]
   // },
 
-  {
-    path: '/clipboard',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/clipboard/index'),
-        name: 'ClipboardDemo',
-        meta: { title: '剪切板', icon: 'clipboard' }
-      }
-    ]
-  },
+  // {
+  //   path: '/clipboard',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/clipboard/index'),
+  //       name: 'ClipboardDemo',
+  //       meta: { title: '剪切板', icon: 'clipboard' }
+  //     }
+  //   ]
+  // },
 
   // {
   //   path: 'external-link',

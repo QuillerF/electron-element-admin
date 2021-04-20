@@ -9,7 +9,7 @@
       label-position="left"
     >
       <div class="title-container">
-        <h3 class="title">登 录</h3>
+        <h3 class="title">信 息 管 理 系 统</h3>
       </div>
 
       <el-form-item prop="username">
@@ -57,7 +57,7 @@
         style="width:100%;margin-bottom:30px;"
         @click.native.prevent="handleLogin"
       >
-        Login
+        登 录
       </el-button>
 
       <!-- <div style="position:relative">
@@ -110,8 +110,8 @@ export default {
     }
     return {
       loginForm: {
-        username: 'admin',
-        password: '111111'
+        username: 'root',
+        password: '123456'
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
