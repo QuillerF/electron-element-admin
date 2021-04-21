@@ -9,7 +9,7 @@
       label-position="left"
     >
       <div class="title-container">
-        <h3 class="title">信 息 管 理 系 统</h3>
+        <h3 class="title">荆 王 村 村 委 会</h3>
       </div>
 
       <el-form-item prop="username">
@@ -78,9 +78,9 @@
 
     <el-dialog title="Or connect with" :visible.sync="showDialog">
       Can not be simulated on local, so please combine you own business simulation! ! !
-      <br>
-      <br>
-      <br>
+      <br />
+      <br />
+      <br />
       <social-sign />
     </el-dialog>
   </div>

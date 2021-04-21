@@ -79,10 +79,10 @@ export const constantRoutes = [
         path: 'dashboard',
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
-        meta: { title: '仪表盘', icon: 'dashboard', affix: true }
+        meta: { title: '首页', icon: 'dashboard', affix: true }
       }
     ]
-  },
+  }
   // {
   //   path: '/documentation',
   //   component: Layout,
@@ -108,20 +108,6 @@ export const constantRoutes = [
   //     }
   //   ]
   // },
-  {
-    path: '/profile',
-    component: Layout,
-    redirect: '/profile/index',
-    hidden: true,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/profile/index'),
-        name: 'Profile',
-        meta: { title: 'Profile', icon: 'user', noCache: true }
-      }
-    ]
-  }
 ]
 
 /**
@@ -132,40 +118,41 @@ export const asyncRoutes = [
   {
     path: '/permission',
     component: Layout,
-    redirect: '/permission/page',
+    redirect: '/permission/role',
     alwaysShow: true, // will always show the root menu
     name: 'Permission',
     meta: {
-      title: '用户管理',
+      title: '成员管理',
       icon: 'lock',
       roles: ['admin', 'editor'] // you can set roles in root nav
     },
     children: [
-      {
-        path: 'page',
-        component: () => import('@/views/permission/page'),
-        name: '页面鉴权',
-        meta: {
-          title: 'Page Permission',
-          roles: ['admin'] // or you can only set roles in sub nav
-        }
-      },
-      {
-        path: 'directive',
-        component: () => import('@/views/permission/directive'),
-        name: '鉴权指令',
-        meta: {
-          title: 'Directive Permission'
-          // if do not set roles, means: this page does not require permission
-        }
-      },
+      // {
+      //   path: 'page',
+      //   component: () => import('@/views/permission/page'),
+      //   name: '页面鉴权',
+      //   meta: {
+      //     title: 'Page Permission',
+      //     roles: ['admin'] // or you can only set roles in sub nav
+      //   }
+      // },
+
       {
         path: 'role',
         component: () => import('@/views/permission/role'),
-        name: '添加用户',
+        name: '成员列表',
         meta: {
-          title: '添加用户',
+          title: '成员列表',
           roles: ['admin']
+        }
+      },
+      {
+        path: 'editpassword',
+        component: () => import('@/views/permission/editpassword'),
+        name: '修改密码',
+        meta: {
+          title: '修改密码'
+          // if do not set roles, means: this page does not require permission
         }
       }
     ]
@@ -279,7 +266,7 @@ export const asyncRoutes = [
     redirect: '/excel/export-excel',
     name: 'Excel',
     meta: {
-      title: 'Excel表格',
+      title: '群众功能',
       icon: 'excel'
     },
     children: [
@@ -287,25 +274,25 @@ export const asyncRoutes = [
         path: 'export-excel',
         component: () => import('@/views/excel/export-excel'),
         name: 'ExportExcel',
-        meta: { title: 'Export Excel' }
+        meta: { title: '群众列表' }
       },
       {
         path: 'export-selected-excel',
         component: () => import('@/views/excel/select-excel'),
         name: 'SelectExcel',
-        meta: { title: 'Export Selected' }
+        meta: { title: '变动记录' }
       },
       {
         path: 'export-merge-header',
         component: () => import('@/views/excel/merge-header'),
         name: 'MergeHeader',
-        meta: { title: 'Merge Header' }
+        meta: { title: '备用' }
       },
       {
         path: 'upload-excel',
         component: () => import('@/views/excel/upload-excel'),
         name: 'UploadExcel',
-        meta: { title: 'Upload Excel' }
+        meta: { title: '批量导入' }
       }
     ]
   },
