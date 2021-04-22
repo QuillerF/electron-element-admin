@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-button type="primary" icon="el-icon-plus" @click="handleAddRole">添加成员</el-button>
 
-    <el-table :data="rolesList" style="width: 100%;margin-top:30px;" border>
+    <el-table :data="rolesList" empty-text="暂无数据" style="width: 100%;margin-top:30px;" border>
       <el-table-column align="center" label="登录账号" width="220">
         <template slot-scope="scope">
           {{ scope.row.key }}
@@ -28,7 +28,7 @@
           {{ scope.row.description }}
         </template>
       </el-table-column>
-      <el-table-column align="center" label="Operations">
+      <el-table-column align="center" label="操作">
         <template slot-scope="scope">
           <el-button type="primary" size="small" @click="handleEdit(scope)">编辑</el-button>
           <el-button type="danger" size="small" @click="handleDelete(scope)">删除</el-button>

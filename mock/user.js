@@ -28,11 +28,16 @@ const users = {
 module.exports = [
   // user login
   {
-    url: '/vue-element-admin/user/login',
+    url: '/user/login',
     type: 'post',
     response: config => {
       const { username } = config.body
-      const token = tokens[username]
+      const token = {
+        nickname: '年的南非第三方',
+        roleId: 'super-admin',
+        roleName: '超级管理员',
+        username: 'root'
+      }
 
       // mock error
       if (!token) {

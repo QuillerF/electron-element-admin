@@ -1,8 +1,15 @@
 import request from '@/utils/request'
-
+// import hashjs from 'hash.js'
+// const setSha256 = type => {
+//   return hashjs
+//     .sha256()
+//     .update(type.trim())
+//     .digest('hex')
+// }
 export function login(data) {
+  // data.password = setSha256(data.password)
   return request({
-    url: '/vue-element-admin/user/login',
+    url: 'user/login',
     method: 'post',
     data
   })
@@ -18,7 +25,7 @@ export function getInfo(token) {
 
 export function logout() {
   return request({
-    url: '/vue-element-admin/user/logout',
+    url: 'logout',
     method: 'post'
   })
 }

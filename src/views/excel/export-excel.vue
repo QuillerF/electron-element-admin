@@ -22,33 +22,51 @@
       </a>
     </div>
 
-    <el-table v-loading="listLoading" :data="list" element-loading-text="Loading..." border fit highlight-current-row>
+    <el-table
+      v-loading="listLoading"
+      v-el-height-adaptive-table="{ bottomOffset: 30 }"
+      height="100px"
+      :data="list"
+      element-loading-text="Loading..."
+      border
+      fit
+      highlight-current-row
+    >
       <el-table-column align="center" label="Id" width="95">
         <template slot-scope="scope">
           {{ scope.$index }}
         </template>
       </el-table-column>
-      <el-table-column label="Title">
-        <template slot-scope="scope">
-          {{ scope.row.title }}
-        </template>
-      </el-table-column>
-      <el-table-column label="Author" width="110" align="center">
-        <template slot-scope="scope">
-          <el-tag>{{ scope.row.author }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column label="Readings" width="115" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.pageviews }}
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="Date" width="220">
+      <el-table-column label="姓名" prop="title"> </el-table-column>
+      <el-table-column label="性别" prop="title"> </el-table-column>
+      <el-table-column label="联系方式" prop="title"> </el-table-column>
+      <el-table-column label="身份证号" prop="title"> </el-table-column>
+      <el-table-column label="户号" prop="title"> </el-table-column>
+      <el-table-column label="组别" prop="title"> </el-table-column>
+      <el-table-column label="民族" prop="title"> </el-table-column>
+      <el-table-column label="宗教信仰" prop="title"> </el-table-column>
+      <el-table-column label="出生日期" prop="title"> </el-table-column>
+      <el-table-column label="参保情况" prop="title"> </el-table-column>
+      <el-table-column label="户主" prop="title"> </el-table-column>
+      <el-table-column label="与户主关系" prop="title"> </el-table-column>
+      <el-table-column label="是否贫困家庭" prop="title"> </el-table-column>
+      <el-table-column label="是否低保" prop="title"> </el-table-column>
+      <el-table-column label="是否五保" prop="title"> </el-table-column>
+      <el-table-column label="是否独生子女" prop="title"> </el-table-column>
+      <el-table-column label="兵役情况" prop="title"> </el-table-column>
+      <el-table-column label="是否军属家庭" prop="title"> </el-table-column>
+      <el-table-column label="政治面貌" prop="title"> </el-table-column>
+      <el-table-column label="婚姻状况" prop="title"> </el-table-column>
+      <el-table-column label="职业" prop="title"> </el-table-column>
+      <el-table-column label="家庭收入" prop="title"> </el-table-column>
+      <el-table-column label="备注" prop="title"> </el-table-column>
+
+      <!-- <el-table-column align="center" label="Date" width="220">
         <template slot-scope="scope">
           <i class="el-icon-time" />
           <span>{{ scope.row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
   </div>
 </template>
