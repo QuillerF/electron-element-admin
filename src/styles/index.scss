@@ -4,6 +4,7 @@
 @import './element-ui.scss';
 @import './sidebar.scss';
 @import './btn.scss';
+@import './flex.scss';
 
 body {
   height: 100%;
@@ -129,9 +130,9 @@ aside {
   position: relative;
 }
 
-.pagination-container {
-  margin-top: 30px;
-}
+// .pagination-container {
+//   margin-top: 30px;
+// }
 
 .text-center {
   text-align: center

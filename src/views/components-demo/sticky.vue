@@ -2,9 +2,7 @@
   <div>
     <sticky :z-index="10" class-name="sub-navbar">
       <el-dropdown trigger="click">
-        <el-button plain>
-          Platform<i class="el-icon-caret-bottom el-icon--right" />
-        </el-button>
+        <el-button plain> Platform<i class="el-icon-caret-bottom el-icon--right" /> </el-button>
         <el-dropdown-menu slot="dropdown" class="no-border">
           <el-checkbox-group v-model="platforms" style="padding: 5px 15px;">
             <el-checkbox v-for="item in platformsOptions" :key="item.key" :label="item.key">
@@ -15,9 +13,7 @@
       </el-dropdown>
 
       <el-dropdown trigger="click">
-        <el-button plain>
-          Link<i class="el-icon-caret-bottom el-icon--right" />
-        </el-button>
+        <el-button plain> Link<i class="el-icon-caret-bottom el-icon--right" /> </el-button>
         <el-dropdown-menu slot="dropdown" class="no-padding no-border" style="width:300px">
           <el-input v-model="url" placeholder="Please enter the content">
             <template slot="prepend">

@@ -1,5 +1,5 @@
 <template>
-  <div :class="{'show':show}" class="header-search">
+  <div :class="{ show: show }" class="header-search">
     <svg-icon class-name="search-icon" icon-class="search" @click.stop="click" />
     <el-select
       ref="headerSearchSelect"
@@ -85,13 +85,16 @@ export default {
         distance: 100,
         maxPatternLength: 32,
         minMatchCharLength: 1,
-        keys: [{
-          name: 'title',
-          weight: 0.7
-        }, {
-          name: 'path',
-          weight: 0.3
-        }]
+        keys: [
+          {
+            name: 'title',
+            weight: 0.7
+          },
+          {
+            name: 'path',
+            weight: 0.3
+          }
+        ]
       })
     },
     // Filter out the routes that can be displayed in the sidebar
@@ -101,7 +104,9 @@ export default {
 
       for (const router of routes) {
         // skip hidden router
-        if (router.hidden) { continue }
+        if (router.hidden) {
+          continue
+        }
 
         const data = {
           path: path.resolve(basePath, router.path),

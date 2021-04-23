@@ -1,8 +1,7 @@
 <template>
   <div class="createPost-container">
     <el-form ref="postForm" :model="postForm" :rules="rules" class="form-container">
-
-      <sticky :z-index="10" :class-name="'sub-navbar '+postForm.status">
+      <sticky :z-index="10" :class-name="'sub-navbar ' + postForm.status">
         <CommentDropdown v-model="postForm.comment_disabled" />
         <PlatformDropdown v-model="postForm.platforms" />
         <SourceUrlDropdown v-model="postForm.source_uri" />
@@ -29,15 +28,32 @@
               <el-row>
                 <el-col :span="8">
                   <el-form-item label-width="60px" label="Author:" class="postInfo-container-item">
-                    <el-select v-model="postForm.author" :remote-method="getRemoteUserList" filterable default-first-option remote placeholder="Search user">
-                      <el-option v-for="(item,index) in userListOptions" :key="item+index" :label="item" :value="item" />
+                    <el-select
+                      v-model="postForm.author"
+                      :remote-method="getRemoteUserList"
+                      filterable
+                      default-first-option
+                      remote
+                      placeholder="Search user"
+                    >
+                      <el-option
+                        v-for="(item, index) in userListOptions"
+                        :key="item + index"
+                        :label="item"
+                        :value="item"
+                      />
                     </el-select>
                   </el-form-item>
                 </el-col>
 
                 <el-col :span="10">
                   <el-form-item label-width="120px" label="Publish Time:" class="postInfo-container-item">
-                    <el-date-picker v-model="displayTime" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="Select date and time" />
+                    <el-date-picker
+                      v-model="displayTime"
+                      type="datetime"
+                      format="yyyy-MM-dd HH:mm:ss"
+                      placeholder="Select date and time"
+                    />
                   </el-form-item>
                 </el-col>
 
@@ -59,7 +75,14 @@
         </el-row>
 
         <el-form-item style="margin-bottom: 40px;" label-width="70px" label="Summary:">
-          <el-input v-model="postForm.content_short" :rows="1" type="textarea" class="article-textarea" autosize placeholder="Please enter the content" />
+          <el-input
+            v-model="postForm.content_short"
+            :rows="1"
+            type="textarea"
+            class="article-textarea"
+            autosize
+            placeholder="Please enter the content"
+          />
           <span v-show="contentShortLength" class="word-counter">{{ contentShortLength }}words</span>
         </el-form-item>
 
@@ -159,7 +182,7 @@ export default {
       // back end return => "2013-06-25 06:59:25"
       // front end need timestamp => 1372114765000
       get() {
-        return (+new Date(this.postForm.display_time))
+        return +new Date(this.postForm.display_time)
       },
       set(val) {
         this.postForm.display_time = new Date(val)
@@ -179,21 +202,23 @@ export default {
   },
   methods: {
     fetchData(id) {
-      fetchArticle(id).then(response => {
-        this.postForm = response.data
+      fetchArticle(id)
+        .then(response => {
+          this.postForm = response.data
 
-        // just for test
-        this.postForm.title += `   Article Id:${this.postForm.id}`
-        this.postForm.content_short += `   Article Id:${this.postForm.id}`
+          // just for test
+          this.postForm.title += `   Article Id:${this.postForm.id}`
+          this.postForm.content_short += `   Article Id:${this.postForm.id}`
 
-        // set tagsview title
-        this.setTagsViewTitle()
+          // set tagsview title
+          this.setTagsViewTitle()
 
-        // set page title
-        this.setPageTitle()
-      }).catch(err => {
-        console.log(err)
-      })
+          // set page title
+          this.setPageTitle()
+        })
+        .catch(err => {
+          console.log(err)
+        })
     },
     setTagsViewTitle() {
       const title = 'Edit Article'
@@ -250,7 +275,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/styles/mixin.scss";
+@import '~@/styles/mixin.scss';
 
 .createPost-container {
   position: relative;

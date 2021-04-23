@@ -79,7 +79,7 @@ export const constantRoutes = [
         path: 'dashboard',
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
-        meta: { title: '首页', icon: 'dashboard', affix: true }
+        meta: { title: '首页', icon: 'el-icon-s-home', affix: true }
       }
     ]
   }
@@ -123,7 +123,7 @@ export const asyncRoutes = [
     name: 'Permission',
     meta: {
       title: '成员管理',
-      icon: 'lock',
+      icon: 'el-icon-s-custom',
       roles: ['admin', 'editor'] // you can set roles in root nav
     },
     children: [

@@ -1,7 +1,13 @@
 <template>
   <div class="app-container">
-
-    <el-button :loading="downloadLoading" style="margin-bottom:20px" type="primary" icon="el-icon-document" @click="handleDownload">Export</el-button>
+    <el-button
+      :loading="downloadLoading"
+      style="margin-bottom:20px"
+      type="primary"
+      icon="el-icon-document"
+      @click="handleDownload"
+      >Export</el-button
+    >
 
     <el-table
       ref="multipleTable"
@@ -41,7 +47,6 @@
         </template>
       </el-table-column>
     </el-table>
-
   </div>
 </template>
 
@@ -88,13 +93,15 @@ export default {
       })
     },
     formatJson(filterVal, jsonData) {
-      return jsonData.map(v => filterVal.map(j => {
-        if (j === 'timestamp') {
-          return parseTime(v[j])
-        } else {
-          return v[j]
-        }
-      }))
+      return jsonData.map(v =>
+        filterVal.map(j => {
+          if (j === 'timestamp') {
+            return parseTime(v[j])
+          } else {
+            return v[j]
+          }
+        })
+      )
     }
   }
 }
