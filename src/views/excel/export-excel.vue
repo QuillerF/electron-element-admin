@@ -1,9 +1,6 @@
 <template>
   <div class="app-container">
     <div class="flex-al mb20">
-      <!-- <FilenameOption v-model="filename" class="mr20" /> -->
-      <!-- <BookTypeOption v-model="bookType" class="mr20" /> -->
-
       <el-select v-model="params.sort" placeholder="" class="mr20" style="width:250px" clearable>
         <el-option label="户号排序" value="户号排序"> </el-option>
       </el-select>
@@ -47,6 +44,13 @@
       <el-table-column label="姓名" fixed prop="title"> </el-table-column>
       <el-table-column v-for="fruit in columns" :key="fruit.prop" :prop="fruit.prop" :label="fruit.label">
       </el-table-column>
+      <el-table-column align="center" fixed="right" label="操作" width="200">
+        <template slot-scope="scope">
+          <el-button type="text" size="default" @click="toDetail(scope.row)">详情</el-button>
+          <el-button type="text" size="default" @click="toDetail(scope.row, 'edit')">修改</el-button>
+          <el-button type="text" size="default" @click="toDelete(scope.row)">删除</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <Pagination
       v-show="total > 0"
@@ -63,7 +67,7 @@ import Pagination from '@/components/Pagination' // Secondary package based on e
 import { fetchList } from '@/api/article'
 import { parseTime } from '@/utils'
 import SetShowColumn from './components/SetShowColumn'
-import Columns from './Enum'
+import { Columns } from './Enum'
 // options components
 // import FilenameOption from './components/FilenameOption'
 // import AutoWidthOption from './components/AutoWidthOption'
@@ -96,6 +100,18 @@ export default {
     this.fetchData()
   },
   methods: {
+    toDelete() {
+      this.$confirm('确认删除该条信息吗?', '提示', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {})
+        .catch(() => {})
+    },
+    toDetail(row, type = 'readonly') {
+      this.$router.push({ path: '/excel/addlog', params: { row, type } })
+    },
     columnsChange(val) {
       this.columns = val
       this.$nextTick(() => {

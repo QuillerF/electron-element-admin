@@ -1,4 +1,4 @@
-const columns = [
+const Columns = [
   {
     label: '性别',
     prop: 'sex'
@@ -88,4 +88,32 @@ const columns = [
     prop: 'remark'
   }
 ]
-export default columns
+
+const ChangeLogsColumns = [
+  {
+    label: '身份证号',
+    prop: 'name'
+  },
+  {
+    label: '变动类型',
+    prop: 'type'
+  },
+  {
+    label: '变动原因',
+    prop: 'reason'
+  },
+  {
+    label: '时间',
+    prop: 'date'
+  },
+  {
+    label: '操作人',
+    prop: 'user'
+  },
+  {
+    label: '备注',
+    prop: 'remark'
+  }
+]
+
+export { Columns, ChangeLogsColumns }

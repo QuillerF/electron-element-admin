@@ -35,7 +35,7 @@ module.exports = {
     overlay: {
       warnings: false,
       errors: true
-    },
+    }
     // proxy: {
     //   [process.env.VUE_APP_BASE_API]: {
     //     target: 'http://7fa742b45d91.ngrok.io/api',
@@ -45,7 +45,7 @@ module.exports = {
     //     }
     //   }
     // }
-    before: require('./mock/mock-server.js')
+    // before: require('./mock/mock-server.js')
   },
 
   // after: require('./mock/mock-server.js')

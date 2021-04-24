@@ -9,7 +9,7 @@
 
 <script>
 import { cloneDeep } from 'lodash'
-import columns from '../Enum'
+import { Columns } from '../Enum'
 
 export default {
   components: {},
@@ -21,7 +21,7 @@ export default {
   },
   data() {
     return {
-      columns,
+      columns: Columns,
       checkList: []
     }
   },

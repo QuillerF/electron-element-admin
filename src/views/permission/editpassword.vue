@@ -10,8 +10,8 @@
       style="width:500px"
       size="normal"
     >
-      <el-form-item label="原密码:" prop="password">
-        <el-input v-model="form.password"></el-input>
+      <el-form-item label="原密码:" prop="oldPassword">
+        <el-input v-model="form.oldPassword"></el-input>
       </el-form-item>
       <el-form-item label="新密码:" prop="newPassword">
         <el-input v-model="form.newPassword"></el-input>
@@ -28,6 +28,7 @@
 
 <script>
 // import { cloneDeep } from 'lodash'
+import Admin from '@/api/admin'
 
 export default {
   components: {},
@@ -35,12 +36,13 @@ export default {
   data() {
     return {
       form: {
-        password: '',
+        userId: this.$store.state.user.userInfo.userId,
+        oldPassword: '',
         newPassword: '',
         checkPassword: ''
       },
       rules: {
-        password: [{ required: true, message: '请输入原始密码', trigger: 'blur' }],
+        oldPassword: [{ required: true, message: '请输入原始密码', trigger: 'blur' }],
         newPassword: [{ required: true, message: '请输入新密码', trigger: 'blur' }],
         checkPassword: [{ required: true, message: '请再次输入新密码', trigger: 'blur' }]
       }
@@ -54,15 +56,14 @@ export default {
       this.$refs.form.validate(async valid => {
         if (valid) {
           // 接口请求
-          const params = this.codeForm
-          const res = await this.$http.login.AUTH_LOGIN_CODE(params)
-          this.orgList = res.orgList
-          this.codeVerifyForm.verifyStr = res.verifyStr
-          if (res.orgList.length === 1) {
-            const [org] = res.orgList
-            this.codeVerifyForm.id = org.id
-            this.toVerifyLogin()
-          }
+          const params = this.form
+          const res = await Admin.USER_UPDATE_PWD(params)
+          this.$message({
+            type: 'success',
+            message: '修改成功'
+          })
+          // this.$store.dispatch('user/logout')
+          this.$router.push('/login')
           console.log(res)
         } else {
           console.log('error submit!!')

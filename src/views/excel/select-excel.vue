@@ -1,122 +1,168 @@
 <template>
   <div class="app-container">
-    <el-input
-      v-model="filename"
-      placeholder="Please enter the file name (default excel-list)"
-      style="width:350px;"
-      prefix-icon="el-icon-document"
-    />
-    <el-button
-      :loading="downloadLoading"
-      style="margin-bottom:20px"
-      type="primary"
-      icon="el-icon-document"
-      @click="handleDownload"
-    >
-      Export Selected Items
-    </el-button>
-    <a
-      href="https://panjiachen.github.io/vue-element-admin-site/feature/component/excel.html"
-      target="_blank"
-      style="margin-left:15px;"
-    >
-      <el-tag type="info">Documentation</el-tag>
-    </a>
+    <div class="flex-al mb20">
+      <!-- <FilenameOption v-model="filename" class="mr20" /> -->
+      <!-- <BookTypeOption v-model="bookType" class="mr20" /> -->
+
+      <el-select v-model="params.sort" placeholder="" class="mr20" style="width:250px" clearable>
+        <el-option label="时间倒序" value="时间倒序"> </el-option>
+      </el-select>
+      <el-input
+        v-model="params.name"
+        prefix-icon="el-icon-search"
+        class="mr20"
+        placeholder="姓名"
+        style="width:300px"
+        clearable
+      ></el-input>
+      <el-button type="primary" icon="el-icon-search" class="mr20" @click="fetchData">搜索</el-button>
+      <el-button type="text" class="mr20" style="font-size:20px;color:#1684FC" @click="showFilterBox"
+        ><svg-icon icon-class="filter"
+      /></el-button>
+    </div>
     <el-table
-      ref="multipleTable"
+      ref="table"
       v-loading="listLoading"
+      v-table-height="{ bottomOffset: 70 }"
+      height="100px"
       :data="list"
-      element-loading-text="拼命加载中"
+      element-loading-text="Loading..."
       border
       fit
       highlight-current-row
-      @selection-change="handleSelectionChange"
     >
-      <el-table-column type="selection" align="center" />
-      <el-table-column align="center" label="Id" width="95">
+      <el-table-column align="center" fixed label="Id" width="95">
         <template slot-scope="scope">
           {{ scope.$index }}
         </template>
       </el-table-column>
-      <el-table-column label="Title">
-        <template slot-scope="scope">
-          {{ scope.row.title }}
-        </template>
+      <el-table-column label="姓名" fixed prop="title"> </el-table-column>
+      <el-table-column v-for="fruit in columns" :key="fruit.prop" :prop="fruit.prop" :label="fruit.label">
       </el-table-column>
-      <el-table-column label="Author" width="110" align="center">
+      <el-table-column align="center" fixed="right" label="操作" width="200">
         <template slot-scope="scope">
-          <el-tag>{{ scope.row.author }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column label="Readings" width="115" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.pageviews }}
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="PDate" width="220">
-        <template slot-scope="scope">
-          <i class="el-icon-time" />
-          <span>{{ scope.row.display_time }}</span>
+          <el-button type="text" size="default" @click="toDetail(scope.row, 'edit')">修改</el-button>
+          <el-button type="text" size="default" @click="toDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
+    <Pagination
+      v-show="total > 0"
+      :total="total"
+      :page.sync="params.page"
+      :limit.sync="params.limit"
+      @pagination="fetchData"
+    />
   </div>
 </template>
 
 <script>
+import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import { fetchList } from '@/api/article'
+import { parseTime } from '@/utils'
+import { ChangeLogsColumns } from './Enum'
+// options components
+// import FilenameOption from './components/FilenameOption'
+// import AutoWidthOption from './components/AutoWidthOption'
+// import BookTypeOption from './components/BookTypeOption'
 
 export default {
-  name: 'SelectExcel',
+  name: 'ExportExcel',
+  components: { Pagination },
   data() {
     return {
+      columns: ChangeLogsColumns,
       list: null,
+      total: 10,
       listLoading: true,
-      multipleSelection: [],
       downloadLoading: false,
-      filename: ''
+      filename: '',
+      autoWidth: true,
+      bookType: 'xlsx',
+      isShowSetColumn: false,
+      params: {
+        page: 1,
+        limit: 50,
+        sort: '户号排序',
+        name: ''
+      }
     }
   },
   created() {
     this.fetchData()
   },
   methods: {
+    toDelete() {
+      this.$confirm('确认删除该条信息吗?', '提示', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {})
+        .catch(() => {})
+    },
+    toDetail(row, type = 'readonly') {
+      this.$router.push({ path: '/excel/addlog', params: { row, type } })
+    },
+    columnsChange(val) {
+      this.columns = val
+      this.$nextTick(() => {
+        this.$refs.table.doLayout()
+      })
+    },
+    toAddLogs() {
+      this.$router.push('/excel/addlog')
+    },
+    showSetColumn() {
+      this.isShowSetColumn = true
+    },
+    showFilterBox() {
+      console.log('name')
+    },
     fetchData() {
       this.listLoading = true
-      fetchList(this.listQuery).then(response => {
+      fetchList().then(response => {
         this.list = response.data.items
         this.listLoading = false
       })
     },
-    handleSelectionChange(val) {
-      this.multipleSelection = val
-    },
     handleDownload() {
-      if (this.multipleSelection.length) {
-        this.downloadLoading = true
-        import('@/vendor/Export2Excel').then(excel => {
-          const tHeader = ['Id', 'Title', 'Author', 'Readings', 'Date']
-          const filterVal = ['id', 'title', 'author', 'pageviews', 'display_time']
-          const list = this.multipleSelection
-          const data = this.formatJson(filterVal, list)
-          excel.export_json_to_excel({
-            header: tHeader,
-            data,
-            filename: this.filename
-          })
-          this.$refs.multipleTable.clearSelection()
-          this.downloadLoading = false
+      this.downloadLoading = true
+      import('@/vendor/Export2Excel').then(excel => {
+        const tHeader = ['Id', 'Title', 'Author', 'Readings', 'Date']
+        const filterVal = ['id', 'title', 'author', 'pageviews', 'display_time']
+        const list = this.list
+        const data = this.formatJson(filterVal, list)
+        excel.export_json_to_excel({
+          header: tHeader,
+          data,
+          filename: this.filename,
+          autoWidth: this.autoWidth,
+          bookType: this.bookType
         })
-      } else {
-        this.$message({
-          message: 'Please select at least one item',
-          type: 'warning'
-        })
-      }
+        this.downloadLoading = false
+      })
     },
     formatJson(filterVal, jsonData) {
-      return jsonData.map(v => filterVal.map(j => v[j]))
+      return jsonData.map(v =>
+        filterVal.map(j => {
+          if (j === 'timestamp') {
+            return parseTime(v[j])
+          } else {
+            return v[j]
+          }
+        })
+      )
     }
   }
 }
 </script>
+
+<style>
+.radio-label {
+  font-size: 14px;
+  color: #606266;
+  line-height: 40px;
+  padding: 0 12px 0 30px;
+}
+</style>

@@ -277,17 +277,24 @@ export const asyncRoutes = [
         meta: { title: '群众列表' }
       },
       {
+        path: 'addlog',
+        component: () => import('@/views/excel/addlog'),
+        name: 'Addlog',
+        hidden: true,
+        meta: { title: '添加记录' }
+      },
+      {
         path: 'export-selected-excel',
         component: () => import('@/views/excel/select-excel'),
         name: 'SelectExcel',
         meta: { title: '变动记录' }
       },
-      {
-        path: 'export-merge-header',
-        component: () => import('@/views/excel/merge-header'),
-        name: 'MergeHeader',
-        meta: { title: '备用' }
-      },
+      // {
+      //   path: 'export-merge-header',
+      //   component: () => import('@/views/excel/merge-header'),
+      //   name: 'MergeHeader',
+      //   meta: { title: '备用' }
+      // },
       {
         path: 'upload-excel',
         component: () => import('@/views/excel/upload-excel'),
