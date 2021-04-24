@@ -16,9 +16,13 @@
       <el-button :loading="downloadLoading" class="mr20" type="primary" icon="el-icon-document" @click="handleDownload">
         导出表格
       </el-button>
-      <el-button type="text" class="mr20" style="font-size:20px;color:#1684FC" @click="showFilterBox"
-        ><svg-icon icon-class="filter"
-      /></el-button>
+
+      <el-popover placement="bottom" title="筛选项" width="700" trigger="click">
+        <FilterBox @change="paramsChange"></FilterBox>
+        <el-button slot="reference" type="text" class="mr20" style="font-size:20px;color:#1684FC" @click="showFilterBox"
+          ><svg-icon icon-class="filter"
+        /></el-button>
+      </el-popover>
       <el-button type="text" class="mr20" @click="toAddLogs">添加记录</el-button>
       <el-popover placement="bottom" title="配置显示列" width="500" trigger="click">
         <SetShowColumn :real-columns="columns" @change="columnsChange"></SetShowColumn>
@@ -67,18 +71,15 @@ import Pagination from '@/components/Pagination' // Secondary package based on e
 import { fetchList } from '@/api/article'
 import { parseTime } from '@/utils'
 import SetShowColumn from './components/SetShowColumn'
+import FilterBox from './components/FilterBox'
 import { Columns } from './Enum'
-// options components
-// import FilenameOption from './components/FilenameOption'
-// import AutoWidthOption from './components/AutoWidthOption'
-// import BookTypeOption from './components/BookTypeOption'
 
 export default {
   name: 'ExportExcel',
-  components: { Pagination, SetShowColumn },
+  components: { Pagination, SetShowColumn, FilterBox },
   data() {
     return {
-      columns: Columns,
+      columns: Columns.filter(item => item.isDefaultShow),
       list: null,
       total: 10,
       listLoading: true,
@@ -87,7 +88,6 @@ export default {
       autoWidth: true,
       bookType: 'xlsx',
       isShowSetColumn: false,
-
       params: {
         page: 1,
         limit: 50,
@@ -100,6 +100,9 @@ export default {
     this.fetchData()
   },
   methods: {
+    paramsChange(val = {}) {
+      Object.assign(this.params, val)
+    },
     toDelete() {
       this.$confirm('确认删除该条信息吗?', '提示', {
         confirmButtonText: '确认',

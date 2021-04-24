@@ -1,4 +1,4 @@
-<!-- 此处写注释 -->
+<!-- 设置显示列 -->
 <template>
   <div>
     <el-checkbox-group v-model="checkList" @change="checkChange">
