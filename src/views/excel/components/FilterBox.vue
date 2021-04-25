@@ -1,8 +1,8 @@
-<!-- 此处写注释 -->
+<!-- 筛选框 -->
 <template>
   <div>
     <el-form ref="form" :model="form" label-width="100px" :inline="true" size="mini">
-      <el-form-item v-for="item in columns" :key="item.prop" :label="item.label">
+      <el-form-item v-for="(item, index) in columns" :key="item.prop + index" :label="item.label">
         <FilterBoxItem :item="item"></FilterBoxItem>
       </el-form-item>
       <div class="flex-ac">

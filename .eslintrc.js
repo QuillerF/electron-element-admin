@@ -19,6 +19,7 @@ module.exports = {
     'no-unused-vars': 'off',
     'no-useless-escape': 'off',
     'vue/no-mutating-props': 'off',
+    'vue/order-in-components': 'off',
     'vue/no-v-html': 'off',
     'vue/max-attributes-per-line': 'off',
     '@typescript-eslint/no-explicit-any': ['off'],

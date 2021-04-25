@@ -123,8 +123,7 @@ export const asyncRoutes = [
     name: 'Permission',
     meta: {
       title: '成员管理',
-      icon: 'el-icon-s-custom',
-      roles: ['admin', 'editor'] // you can set roles in root nav
+      icon: 'el-icon-s-custom'
     },
     children: [
       // {
@@ -349,30 +348,6 @@ export const asyncRoutes = [
   //       component: () => import('@/views/theme/index'),
   //       name: 'Theme',
   //       meta: { title: '主题', icon: 'theme' }
-  //     }
-  //   ]
-  // },
-
-  // {
-  //   path: '/clipboard',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       component: () => import('@/views/clipboard/index'),
-  //       name: 'ClipboardDemo',
-  //       meta: { title: '剪切板', icon: 'clipboard' }
-  //     }
-  //   ]
-  // },
-
-  // {
-  //   path: 'external-link',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'https://github.com/PanJiaChen/vue-element-admin',
-  //       meta: { title: 'External Link', icon: 'link' }
   //     }
   //   ]
   // },

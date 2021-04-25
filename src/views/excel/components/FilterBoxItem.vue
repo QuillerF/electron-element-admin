@@ -31,8 +31,21 @@
       >
       </el-input-number>
     </div>
-    <el-select v-else v-model="value" :multiple="item.isMutiple" placeholder="不限" clearable>
-      <el-option v-for="op in item.options" :key="op.value" :label="op.label" :value="op.value || op.label"></el-option>
+    <el-select v-else-if="item.isMutiple" v-model="values" :multiple="item.isMutiple" placeholder="不限" clearable>
+      <el-option
+        v-for="(op, index) in item.options"
+        :key="index"
+        :label="op.label"
+        :value="op.value || op.label"
+      ></el-option>
+    </el-select>
+    <el-select v-else v-model="value" placeholder="不限" clearable>
+      <el-option
+        v-for="(op, index) in item.options"
+        :key="index"
+        :label="op.label"
+        :value="op.value || op.label"
+      ></el-option>
     </el-select>
   </div>
 </template>
@@ -51,6 +64,7 @@ export default {
   data() {
     return {
       value: '',
+      values: [],
       daterange: [],
       min: '',
       max: ''

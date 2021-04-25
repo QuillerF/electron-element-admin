@@ -2,7 +2,9 @@
 <template>
   <div>
     <el-checkbox-group v-model="checkList" @change="checkChange">
-      <el-checkbox v-for="item in columns" :key="item.prop" :label="item.prop">{{ item.label }}</el-checkbox>
+      <el-checkbox v-for="(item, index) in columns" :key="index" :label="item.prop" style="width:25%">{{
+        item.label
+      }}</el-checkbox>
     </el-checkbox-group>
   </div>
 </template>

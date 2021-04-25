@@ -1,29 +1,59 @@
 const Columns = [
   {
+    label: '姓名',
+    prop: 'sex',
+    fixed: true,
+    addtype: 'text',
+    placeholder: '2-10个汉字',
+    required: true
+  },
+  {
     label: '性别',
     prop: 'sex',
     isFilter: true,
-    options: [{ label: '男' }, { label: '女' }]
+    options: [{ label: '男' }, { label: '女' }],
+    addtype: 'select',
+    required: true
   },
   {
     label: '联系方式',
     prop: 'phone',
-    isDefaultShow: true
+    isDefaultShow: true,
+    addtype: 'text'
   },
   {
     label: '身份证号',
     prop: 'idcard',
-    isDefaultShow: true
+    isDefaultShow: true,
+    addtype: 'text',
+    required: true
   },
   {
     label: '户主',
     prop: 'householder',
-    isDefaultShow: true
+    isDefaultShow: true,
+    addtype: 'text',
+    required: true
   },
   {
     label: '与户主关系',
     prop: 'hhRelation',
-    isDefaultShow: true
+    isDefaultShow: true,
+    options: [
+      { label: '本人' },
+      { label: '配偶、' },
+      { label: '子' },
+      { label: '女' },
+      { label: '(外)孙子女' },
+      { label: '父' },
+      { label: '母' },
+      { label: '兄弟姐妹' },
+      { label: '重孙子女' },
+      { label: '儿媳' },
+      { label: '女婿' }
+    ],
+    addtype: 'select',
+    required: true
   },
   {
     label: '组别',
@@ -31,17 +61,32 @@ const Columns = [
     isDefaultShow: true,
     isFilter: true,
     isMutiple: true,
-    options: [{ label: '一组' }, { label: '二组' }]
+    options: [
+      { label: '一组' },
+      { label: '二组' },
+      { label: '三组' },
+      { label: '四组' },
+      { label: '五组' },
+      { label: '六组' },
+      { label: '七组' },
+      { label: '八组' }
+    ],
+    addtype: 'select',
+    required: true
   },
   {
     label: '户号',
-    prop: 'no'
+    prop: 'no',
+    addtype: 'text',
+    required: true
   },
   {
     label: '民族',
     prop: 'nation',
     isFilter: true,
-    options: [{ label: '汉族' }, { label: '非汉族' }]
+    options: [{ label: '汉族' }, { label: '非汉族' }],
+    addtype: 'select',
+    required: true
   },
   {
     label: '学历',
@@ -57,96 +102,163 @@ const Columns = [
       { label: '硕士' },
       { label: '博士' },
       { label: '其它' }
-    ]
+    ],
+    addtype: 'select',
+    required: true
   },
   {
     label: '宗教信仰',
     prop: 'religion',
     isFilter: true,
     isMutiple: true,
-    options: [{ label: '基督教' }, { label: '佛教' }, { label: '伊斯兰教' }, { label: '其它' }]
+    options: [{ label: '无' }, { label: '基督教' }, { label: '佛教' }, { label: '伊斯兰教' }, { label: '其它' }],
+    addtype: 'select',
+    required: true
   },
   {
     label: '参保情况',
     prop: 'insurance',
     isFilter: true,
-    options: [{ label: '新农合' }, { label: '城镇居民医保' }]
+    options: [{ label: '新农合' }, { label: '城镇居民医保' }],
+    addtype: 'select',
+    required: true
   },
   {
     label: '出生日期',
     prop: 'birthday',
     isFilter: true,
-    type: 'daterange'
+    type: 'daterange',
+    addtype: 'date',
+    required: true
   },
   {
     label: '是否贫困家庭',
     prop: 'isPoverty',
     isFilter: true,
-    options: [{ label: '是' }, { label: '否' }]
+    options: [{ label: '是' }, { label: '否' }],
+    addtype: 'select',
+    required: true
   },
   {
     label: '是否低保',
     prop: 'isLowIncome',
     isFilter: true,
-    options: [{ label: '是' }, { label: '否' }]
+    options: [{ label: '是' }, { label: '否' }],
+    addtype: 'select',
+    required: true
   },
   {
     label: '是否五保',
     prop: 'is5Guarantee',
     isFilter: true,
-    options: [{ label: '是' }, { label: '否' }]
+    options: [{ label: '是' }, { label: '否' }],
+    addtype: 'select',
+    required: true
   },
   {
     label: '是否独生子女',
     prop: 'isOnlyChild',
     isFilter: true,
-    options: [{ label: '是' }, { label: '否' }]
+    options: [{ label: '是' }, { label: '否' }],
+    addtype: 'select',
+    required: true
   },
   {
     label: '兵役情况',
     prop: 'military',
     isFilter: true,
-    options: [{ label: '是' }, { label: '否' }]
+    options: [{ label: '是' }, { label: '否' }],
+    addtype: 'select',
+    required: true
   },
   {
     label: '是否军属家庭',
     prop: 'isMilitaryFamily',
     isFilter: true,
-    options: [{ label: '是' }, { label: '否' }]
+    options: [{ label: '是' }, { label: '否' }],
+    addtype: 'select',
+    required: true
   },
   {
     label: '政治面貌',
     prop: 'politicalStatus',
     isFilter: true,
     isMutiple: true,
-    options: [{ label: '中共党员' }, { label: '共青团员' }, { label: '群众' }]
+    options: [{ label: '中共党员' }, { label: '共青团员' }, { label: '群众' }],
+    addtype: 'select',
+    required: true
   },
   {
     label: '婚姻状况',
     prop: 'marriage',
     isFilter: true,
     isMutiple: true,
-    options: [{ label: '未婚' }, { label: '已婚' }, { label: '丧偶' }, { label: '离异' }]
+    options: [{ label: '未婚' }, { label: '已婚' }, { label: '丧偶' }, { label: '离异' }],
+    addtype: 'select',
+    required: true
   },
   {
     label: '职业',
-    prop: 'professional'
+    prop: 'professional',
+    addtype: 'text'
   },
   {
-    label: '家庭收入',
+    label: '家庭年收入',
     prop: 'familyIncome',
     isFilter: true,
-    type: 'numrange'
+    type: 'numrange',
+    addtype: 'text',
+    required: true
   },
   {
-    label: '耕地面积',
+    label: '耕地面积(亩)',
     prop: 'arableLand',
     isFilter: true,
-    type: 'numrange'
+    type: 'numrange',
+    addtype: 'text',
+    required: true
+  },
+  {
+    label: '耕地备注',
+    prop: 'arableRemark',
+    isFilter: true,
+    type: 'numrange',
+    addtype: 'textarea',
+    placeholder: '至多200字'
+  },
+  {
+    label: '户籍地址',
+    prop: 'householdRegistrationAddress',
+    addtype: 'textarea',
+    required: true
+  },
+  {
+    label: '居住地址',
+    prop: 'liveAddress',
+    addtype: 'textarea',
+    required: true
+  },
+  {
+    label: '是否迁入',
+    prop: 'moveIn',
+    addtype: 'select',
+    options: [{ label: '是' }, { label: '否' }]
+  },
+  {
+    label: '迁入原因',
+    prop: 'immigration',
+    addtype: 'select',
+    options: [{ label: '嫁娶' }, { label: '收留' }]
+  },
+  {
+    label: '迁入备注',
+    prop: 'immigration',
+    addtype: 'textarea'
   },
   {
     label: '备注',
-    prop: 'remark'
+    prop: 'remark',
+    addtype: 'textarea'
   }
 ]
 

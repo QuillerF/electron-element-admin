@@ -6,3 +6,21 @@ export function getToken() {
     method: 'get'
   })
 }
+
+/**
+ * 上传文件
+ * @param {*} file
+ */
+const uploadPicToQiniu = async file => {
+  const formData = new FormData()
+  // 文件对象
+  formData.append('file', file)
+
+  return request.post('form/qiniu/save', formData, {
+    timeout: 10000,
+    headers: {
+      'Content-Type': 'application/json',
+      platform: 'pc'
+    }
+  })
+}
