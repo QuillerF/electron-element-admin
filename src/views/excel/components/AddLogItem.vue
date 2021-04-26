@@ -1,8 +1,22 @@
 <!-- 添加记录 -->
 <template>
   <div>
-    <el-date-picker v-if="item.addtype === 'date'" v-model="date" type="date" placeholde="请选择日期"></el-date-picker>
-    <el-input v-else-if="item.addtype === 'text'" v-model="text" :placeholder="item.placeholder" clearable></el-input>
+    <el-date-picker
+      v-if="item.addtype === 'date'"
+      v-model="date"
+      type="date"
+      style="width:200px"
+      placeholde="请选择日期"
+      @change="valueChange"
+    ></el-date-picker>
+    <el-input
+      v-else-if="item.addtype === 'text'"
+      v-model="text"
+      style="width:200px"
+      :placeholder="item.placeholder"
+      clearable
+      @blur="valueChange"
+    ></el-input>
     <el-input
       v-else-if="item.addtype === 'textarea'"
       v-model="textarea"
@@ -10,12 +24,11 @@
       :rows="4"
       type="textarea"
       resize="none"
+      style="width:200px"
       clearable
+      @blur="valueChange"
     ></el-input>
-    <div v-else-if="item.addtype === 'upload'">
-      <UploadImages :limit="1"></UploadImages>
-    </div>
-    <el-select v-else v-model="select" clearable>
+    <el-select v-else v-model="select" style="width:200px" clearable @change="valueChange">
       <el-option
         v-for="(op, index) in item.options"
         :key="index"
@@ -28,10 +41,8 @@
 
 <script>
 import { cloneDeep } from 'lodash'
-import UploadImages from './UploadImages'
 
 export default {
-  components: { UploadImages },
   props: {
     item: {
       type: Object,
@@ -50,12 +61,8 @@ export default {
   watch: {},
   created() {},
   methods: {
-    handleRemove(file, fileList) {
-      console.log(file, fileList)
-    },
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url
-      this.dialogVisible = true
+    valueChange(val) {
+      this.$emit('change', this.item.prop, val)
     }
   }
 }

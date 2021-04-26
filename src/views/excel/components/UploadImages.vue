@@ -34,6 +34,7 @@
 <script>
 import { cloneDeep, isEmpty } from 'lodash'
 import qiniu from '@/api/qiniu'
+import { compressImage } from '@/utils/imgupload'
 
 export default {
   name: 'UploadImage',
@@ -145,7 +146,7 @@ export default {
         }
       } else {
         // 图片
-        if (!['image/jpg', 'image/jpeg', 'image/png', 'image/gif'].includes(file.type)) {
+        if (!['image/jpg', 'image/jpeg', 'image/png'].includes(file.type)) {
           this.$message.error(`请上传图片!`)
           return false
         }
@@ -170,8 +171,10 @@ export default {
       }
     },
     async uploadImage({ file }) {
-      console.log(file)
-      const url = await qiniu.uploadPicToQiniu(file, false)
+      console.log('file=====>', file)
+      const filebase64 = await compressImage(file.path)
+      console.log('filebase64===>', filebase64)
+      const url = await qiniu.uploadPicToQiniu(filebase64)
       if (this.showFileList) {
         const { uid, name, size } = file
         this.$emit('uploadImage', this.uploadImageList.concat({ uid, url, name, size }))

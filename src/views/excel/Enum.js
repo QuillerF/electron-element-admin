@@ -1,7 +1,9 @@
+import RegExp from '@/utils/RegExp'
+
 const Columns = [
   {
     label: '姓名',
-    prop: 'sex',
+    prop: 'name',
     fixed: true,
     addtype: 'text',
     placeholder: '2-10个汉字',
@@ -26,7 +28,8 @@ const Columns = [
     prop: 'idcard',
     isDefaultShow: true,
     addtype: 'text',
-    required: true
+    required: true,
+    rules: [{ min: 18, max: 18, message: '格式错误' }]
   },
   {
     label: '户主',
@@ -218,14 +221,14 @@ const Columns = [
     addtype: 'text',
     required: true
   },
-  {
-    label: '耕地备注',
-    prop: 'arableRemark',
-    isFilter: true,
-    type: 'numrange',
-    addtype: 'textarea',
-    placeholder: '至多200字'
-  },
+  // {
+  //   label: '耕地备注',
+  //   prop: 'arableRemark',
+  //   isFilter: true,
+  //   type: 'numrange',
+  //   addtype: 'textarea',
+  //   placeholder: '至多200字'
+  // },
   {
     label: '户籍地址',
     prop: 'householdRegistrationAddress',
@@ -250,11 +253,11 @@ const Columns = [
     addtype: 'select',
     options: [{ label: '嫁娶' }, { label: '收留' }]
   },
-  {
-    label: '迁入备注',
-    prop: 'immigration',
-    addtype: 'textarea'
-  },
+  // {
+  //   label: '迁入备注',
+  //   prop: 'immigration',
+  //   addtype: 'textarea'
+  // },
   {
     label: '备注',
     prop: 'remark',
@@ -289,4 +292,23 @@ const ChangeLogsColumns = [
   }
 ]
 
-export { Columns, ChangeLogsColumns }
+const addlogItems = [
+  {
+    label: '身份证正面',
+    prop: 'idIsPositive'
+  },
+  {
+    label: '身份证反面',
+    prop: 'idIsOpposite'
+  },
+  {
+    label: '户口本本人页',
+    prop: 'houseBookSelf'
+  },
+  {
+    label: '户口本户主页',
+    prop: 'houseBookOwner'
+  }
+]
+
+export { Columns, ChangeLogsColumns, addlogItems }

@@ -73,7 +73,8 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
+    redirect: '/excel/export-excel',
+    hidden: true,
     children: [
       {
         path: 'dashboard',

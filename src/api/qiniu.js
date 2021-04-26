@@ -1,26 +1,24 @@
 import request from '@/utils/request'
 
-export function getToken() {
-  return request({
-    url: '/qiniu/upload/token', // 假地址 自行替换
-    method: 'get'
-  })
-}
+// export function getToken() {
+//   return request({
+//     url: '/qiniu/upload/token', // 假地址 自行替换
+//     method: 'get'
+//   })
+// }
 
 /**
  * 上传文件
  * @param {*} file
  */
 const uploadPicToQiniu = async file => {
-  const formData = new FormData()
+  // const formData = new FormData()
   // 文件对象
-  formData.append('file', file)
+  // formData.append('file', file)
 
-  return request.post('form/qiniu/save', formData, {
-    timeout: 10000,
-    headers: {
-      'Content-Type': 'application/json',
-      platform: 'pc'
-    }
+  request({
+    url: 'user/upload-image',
+    method: 'post',
+    data: { file }
   })
 }
