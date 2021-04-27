@@ -78,7 +78,7 @@ export default {
   /**
    * 字母加数字
    */
-  numberLetter: /[0-9a-zA-Z]/,
+  numberLetter: /^[0-9a-zA-Z]+$/,
   /**
    * 六位验证码,任意数字包括0
    */

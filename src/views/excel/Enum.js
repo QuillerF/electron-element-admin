@@ -5,13 +5,14 @@ const Columns = [
     label: '姓名',
     prop: 'name',
     fixed: true,
+    isDefaultShow: true,
     addtype: 'text',
     placeholder: '2-10个汉字',
     required: true
   },
   {
     label: '性别',
-    prop: 'sex',
+    prop: 'gender',
     isFilter: true,
     options: [{ label: '男' }, { label: '女' }],
     addtype: 'select',
@@ -25,7 +26,7 @@ const Columns = [
   },
   {
     label: '身份证号',
-    prop: 'idcard',
+    prop: 'idCardNo',
     isDefaultShow: true,
     addtype: 'text',
     required: true,
@@ -33,7 +34,7 @@ const Columns = [
   },
   {
     label: '户主',
-    prop: 'householder',
+    prop: 'houseHolderName',
     isDefaultShow: true,
     addtype: 'text',
     required: true
@@ -60,7 +61,7 @@ const Columns = [
   },
   {
     label: '组别',
-    prop: 'group',
+    prop: 'groupName',
     isDefaultShow: true,
     isFilter: true,
     isMutiple: true,
@@ -79,7 +80,7 @@ const Columns = [
   },
   {
     label: '户号',
-    prop: 'no',
+    prop: 'hhRegistryNo',
     addtype: 'text',
     required: true
   },
@@ -93,7 +94,7 @@ const Columns = [
   },
   {
     label: '学历',
-    prop: 'nation',
+    prop: 'education',
     isFilter: true,
     isMutiple: true,
     options: [
@@ -152,7 +153,7 @@ const Columns = [
   },
   {
     label: '是否五保',
-    prop: 'is5Guarantee',
+    prop: 'isFiveGuarantee',
     isFilter: true,
     options: [{ label: '是' }, { label: '否' }],
     addtype: 'select',
@@ -202,7 +203,7 @@ const Columns = [
   },
   {
     label: '职业',
-    prop: 'professional',
+    prop: 'wordType',
     addtype: 'text'
   },
   {
@@ -215,7 +216,7 @@ const Columns = [
   },
   {
     label: '耕地面积(亩)',
-    prop: 'arableLand',
+    prop: 'farmlandMu',
     isFilter: true,
     type: 'numrange',
     addtype: 'text',
@@ -223,7 +224,7 @@ const Columns = [
   },
   // {
   //   label: '耕地备注',
-  //   prop: 'arableRemark',
+  //   prop: 'farmlandRemark',
   //   isFilter: true,
   //   type: 'numrange',
   //   addtype: 'textarea',
@@ -231,31 +232,31 @@ const Columns = [
   // },
   {
     label: '户籍地址',
-    prop: 'householdRegistrationAddress',
+    prop: 'residenceAddress',
     addtype: 'textarea',
     required: true
   },
   {
     label: '居住地址',
-    prop: 'liveAddress',
+    prop: 'residentialAddress',
     addtype: 'textarea',
     required: true
   },
   {
     label: '是否迁入',
-    prop: 'moveIn',
+    prop: 'isMoveIn',
     addtype: 'select',
     options: [{ label: '是' }, { label: '否' }]
   },
   {
     label: '迁入原因',
-    prop: 'immigration',
+    prop: 'moveInReason',
     addtype: 'select',
     options: [{ label: '嫁娶' }, { label: '收留' }]
   },
   // {
   //   label: '迁入备注',
-  //   prop: 'immigration',
+  //   prop: 'moveInRemark',
   //   addtype: 'textarea'
   // },
   {
@@ -295,19 +296,19 @@ const ChangeLogsColumns = [
 const addlogItems = [
   {
     label: '身份证正面',
-    prop: 'idIsPositive'
+    prop: 'idCardFront'
   },
   {
     label: '身份证反面',
-    prop: 'idIsOpposite'
+    prop: 'idCardBack'
   },
   {
     label: '户口本本人页',
-    prop: 'houseBookSelf'
+    prop: 'hhRegistrySelf'
   },
   {
     label: '户口本户主页',
-    prop: 'houseBookOwner'
+    prop: 'hhRegistryMaster'
   }
 ]
 

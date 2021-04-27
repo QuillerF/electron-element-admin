@@ -1,7 +1,7 @@
 <!-- 筛选框 -->
 <template>
   <div>
-    <el-form ref="form" :model="form" label-width="100px" :inline="true" size="mini">
+    <el-form ref="form" :model="form" label-width="120px" :inline="true" size="mini">
       <el-form-item v-for="(item, index) in columns" :key="item.prop + index" :label="item.label">
         <FilterBoxItem :item="item"></FilterBoxItem>
       </el-form-item>

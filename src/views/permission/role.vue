@@ -4,9 +4,13 @@
 
     <el-table
       v-table-height="{ bottomOffset: 50 }"
+      v-loading="loading"
       height="100px"
       :data="list"
       empty-text="暂无数据"
+      class="ss-table"
+      header-row-class-name="ss-table-header-row"
+      header-cell-class-name="ss-table-color-header-cell"
       style="width: 100%;margin-top:30px;"
       border
     >
@@ -38,29 +42,34 @@
       <el-table-column align="center" label="操作" width="200">
         <template slot-scope="scope">
           <el-button type="text" @click="resetPassword(scope.row)">重置密码</el-button>
-          <el-button type="text" @click="handleDelete(scope)">删除</el-button>
+          <el-button type="text" style="color:#F56C6C" @click="handleDelete(scope)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <el-dialog :visible.sync="dialogVisible" width="500px" :title="dialogType === 'edit' ? '修改成员信息' : '添加成员'">
-      <el-form :model="form" label-width="80px" label-position="left">
-        <el-form-item label="登录账号">
+    <el-dialog
+      :visible.sync="dialogVisible"
+      :close-on-click-modal="false"
+      width="500px"
+      :title="dialogType === 'edit' ? '修改成员信息' : '添加成员'"
+    >
+      <el-form ref="form" :model="form" :rules="rules" label-width="100px">
+        <el-form-item label="登录账号：" prop="username">
           <el-input v-model="form.username" placeholder="请输入登录账号" />
         </el-form-item>
-        <el-form-item label="姓名">
+        <el-form-item label="姓名：" prop="nickname">
           <el-input v-model="form.nickname" placeholder="名称" />
         </el-form-item>
-        <el-form-item label="联系方式">
+        <el-form-item label="联系方式：" prop="phone">
           <el-input v-model="form.phone" placeholder="请输入手机号" />
         </el-form-item>
-        <el-form-item label="角色">
+        <el-form-item label="角色：" prop="roleId">
           <el-select v-model="form.roleId" placeholder="请选择角色">
             <el-option v-for="ritem in roles" :key="ritem.roleId" :label="ritem.roleName" :value="ritem.roleId">
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item v-if="form.roleId === 'group'" label="权限范围">
+        <el-form-item v-if="form.roleId === 'group'" prop="groupId" label="权限范围：">
           <el-radio-group v-model="form.groupId">
             <el-radio v-for="gitem in groups" :key="gitem.groupId" :label="gitem.groupId" style="margin-bottom:20px">{{
               gitem.groupName
@@ -69,8 +78,8 @@
         </el-form-item>
       </el-form>
       <div style="text-align:center;">
-        <el-button type="danger" @click="dialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="confirmRole">确定</el-button>
+        <el-button class="mr20" @click="dialogVisible = false">取消</el-button>
+        <el-button :loading="addloading" type="primary" @click="confirmRole">确定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -78,15 +87,16 @@
 
 <script>
 import path from 'path'
-import { deepClone } from '@/utils'
-import { getRoutes, getRoles, addRole, deleteRole, updateRole } from '@/api/role'
 import Admin from '@/api/admin'
+import RegExp from '@/utils/RegExp'
 
 const defaultRole = {
   key: '',
   name: '',
   description: '',
-  routes: []
+  routes: [],
+  addloading: false,
+  loading: true
 }
 
 export default {
@@ -99,11 +109,28 @@ export default {
         groupId: '',
         nickname: '',
         phone: '',
-        roleId: '',
+        roleId: 'group',
         username: ''
       },
+      rules: {
+        nickname: [
+          { required: true, message: '请输入姓名' },
+          { min: 2, max: 6, message: '2-6个字符' }
+        ],
+        username: [
+          { required: true, message: '请输入账号' },
+          { min: 4, max: 16, message: '4-16个字符' }
+        ],
+        roleId: [{ required: true, message: '请选择角色' }],
+        groupId: [{ required: true, message: '请选择组别' }],
+        phone: [
+          { required: true, message: '请输入手机号' },
+          { pattern: RegExp.phone, message: '请输入手机号' }
+        ]
+      },
       groups: [],
-      roles: []
+      roles: [],
+      addloading: false
     }
   },
   computed: {
@@ -127,8 +154,14 @@ export default {
       this.groups = groups || []
     },
     async getData() {
-      const res = await Admin.ADMIN_USER_LIST()
-      this.list = res
+      try {
+        this.loading = true
+        const res = await Admin.ADMIN_USER_LIST()
+        this.list = res
+        this.loading = false
+      } catch (error) {
+        this.loading = false
+      }
     },
 
     resetPassword(row) {
@@ -187,20 +220,30 @@ export default {
     },
 
     async confirmRole() {
-      await Admin.ADMIN_ADD_USER(this.form)
-      this.$message({
-        message: '添加成功',
-        type: 'success'
+      this.$refs.form.validate(async bool => {
+        if (bool) {
+          try {
+            this.addloading = true
+            await Admin.ADMIN_ADD_USER(this.form)
+            this.dialogVisible = false
+            this.$message({
+              message: '添加成功',
+              type: 'success'
+            })
+            this.getData()
+            this.form = {
+              groupId: '',
+              nickname: '',
+              phone: '',
+              roleId: '',
+              username: ''
+            }
+            this.addloading = false
+          } catch (error) {
+            this.addloading = false
+          }
+        }
       })
-      this.getData()
-      this.dialogVisible = false
-      this.form = {
-        groupId: '',
-        nickname: '',
-        phone: '',
-        roleId: '',
-        username: ''
-      }
     }
   }
 }

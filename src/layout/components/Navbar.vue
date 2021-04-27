@@ -16,17 +16,12 @@
         <error-log class="errLog-container right-menu-item hover-effect" />
 
         <screenfull id="screenfull" class="right-menu-item hover-effect" />
-
-        <!-- <el-tooltip content="Global Size" effect="dark" placement="bottom">
-          <size-select id="size-select" class="right-menu-item hover-effect" />
-        </el-tooltip> -->
       </template>
 
-      <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
-        <div class="avatar-wrapper">
-          <span>{{ name }}</span>
-          <!-- <img :src="avatar + '?imageView2/1/w/80/h/80'" class="user-avatar" /> -->
-          <i class="el-icon-caret-bottom" />
+      <el-dropdown class="right-menu-item hover-effect" trigger="click">
+        <div class="flex-ar">
+          <span class="mr10">{{ name }}</span>
+          <el-button type="text" icon="el-icon-caret-bottom" size="default"></el-button>
         </div>
         <el-dropdown-menu slot="dropdown">
           <router-link to="/permission/editpassword">

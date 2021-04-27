@@ -8,21 +8,21 @@ import request from '@/utils/request'
 // }
 export function login(data) {
   // data.password = setSha256(data.password)
-  // return request({
-  //   url: 'user/login',
-  //   method: 'post',
-  //   data
-  // })
-  return Promise.resolve({
-    status: 200,
-    data: {
-      data: {
-        nickName: 'adfadf',
-        roleId: 'root-admin'
-      },
-      status: 0
-    }
+  return request({
+    url: 'user/login',
+    method: 'post',
+    data
   })
+  // return Promise.resolve({
+  //   status: 200,
+  //   data: {
+  //     data: {
+  //       nickName: 'adfadf',
+  //       roleId: 'super-admin'
+  //     },
+  //     status: 0
+  //   }
+  // })
 }
 
 export function getInfo(token) {

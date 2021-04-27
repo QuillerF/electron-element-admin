@@ -1,11 +1,9 @@
 <template>
   <div class="app-container">
-    <div class="flex-al mb20">
-      <!-- <FilenameOption v-model="filename" class="mr20" /> -->
-      <!-- <BookTypeOption v-model="bookType" class="mr20" /> -->
-
+    <div class="flex-ar mb20">
       <el-select v-model="params.sort" placeholder="" class="mr20" style="width:250px" clearable>
         <el-option label="时间倒序" value="时间倒序"> </el-option>
+        <el-option label="时间正序" value="时间正序"> </el-option>
       </el-select>
       <el-input
         v-model="params.name"
@@ -36,8 +34,14 @@
           {{ scope.$index }}
         </template>
       </el-table-column>
-      <el-table-column label="姓名" fixed prop="title"> </el-table-column>
-      <el-table-column v-for="fruit in columns" :key="fruit.prop" :prop="fruit.prop" :label="fruit.label">
+      <el-table-column label="姓名" align="center" fixed prop="title"> </el-table-column>
+      <el-table-column
+        v-for="fruit in columns"
+        :key="fruit.prop"
+        :prop="fruit.prop"
+        :label="fruit.label"
+        align="center"
+      >
       </el-table-column>
       <el-table-column align="center" fixed="right" label="操作" width="200">
         <template slot-scope="scope">
@@ -61,10 +65,6 @@ import Pagination from '@/components/Pagination' // Secondary package based on e
 import { fetchList } from '@/api/article'
 import { parseTime } from '@/utils'
 import { ChangeLogsColumns } from './Enum'
-// options components
-// import FilenameOption from './components/FilenameOption'
-// import AutoWidthOption from './components/AutoWidthOption'
-// import BookTypeOption from './components/BookTypeOption'
 
 export default {
   name: 'ExportExcel',
@@ -83,7 +83,7 @@ export default {
       params: {
         page: 1,
         limit: 50,
-        sort: '户号排序',
+        sort: '时间倒序',
         name: ''
       }
     }
@@ -119,12 +119,15 @@ export default {
     showFilterBox() {
       console.log('name')
     },
-    fetchData() {
-      this.listLoading = true
-      fetchList().then(response => {
-        this.list = response.data.items
+    async fetchData() {
+      try {
+        this.listLoading = true
+        const res = await fetchList()
+        this.list = res.data.items
         this.listLoading = false
-      })
+      } catch (error) {
+        this.listLoading = false
+      }
     },
     handleDownload() {
       this.downloadLoading = true

@@ -31,7 +31,14 @@
       >
       </el-input-number>
     </div>
-    <el-select v-else-if="item.isMutiple" v-model="values" :multiple="item.isMutiple" placeholder="不限" clearable>
+    <el-select
+      v-else-if="item.isMutiple"
+      v-model="values"
+      :multiple="item.isMutiple"
+      collapse-tags
+      placeholder="不限"
+      clearable
+    >
       <el-option
         v-for="(op, index) in item.options"
         :key="index"

@@ -1,8 +1,9 @@
 <template>
   <div class="app-container">
-    <div class="flex-al mb20">
+    <div class="flex-ar mb20">
       <el-select v-model="params.sort" placeholder="" class="mr20" style="width:250px" clearable>
         <el-option label="户号排序" value="户号排序"> </el-option>
+        <el-option label="最近修改" value="最近修改"> </el-option>
       </el-select>
       <el-input
         v-model="params.name"
@@ -35,7 +36,11 @@
       v-table-height="{ bottomOffset: 70 }"
       height="100px"
       :data="list"
+      stripe
       element-loading-text="Loading..."
+      class="ss-table"
+      header-row-class-name="ss-table-header-row"
+      header-cell-class-name="ss-table-color-header-cell"
       border
       fit
       highlight-current-row
@@ -45,8 +50,14 @@
           {{ scope.$index }}
         </template>
       </el-table-column>
-      <el-table-column label="姓名" fixed prop="title"> </el-table-column>
-      <el-table-column v-for="fruit in columns" :key="fruit.prop" :prop="fruit.prop" :label="fruit.label">
+      <el-table-column label="姓名" align="center" fixed prop="title"> </el-table-column>
+      <el-table-column
+        v-for="fruit in columns"
+        :key="fruit.prop"
+        :prop="fruit.prop"
+        :label="fruit.label"
+        align="center"
+      >
       </el-table-column>
       <el-table-column align="center" fixed="right" label="操作" width="200">
         <template slot-scope="scope">
@@ -130,12 +141,15 @@ export default {
     showFilterBox() {
       console.log('name')
     },
-    fetchData() {
-      this.listLoading = true
-      fetchList().then(response => {
-        this.list = response.data.items
+    async fetchData() {
+      try {
+        this.listLoading = true
+        const res = await fetchList()
+        this.list = res.data.items
         this.listLoading = false
-      })
+      } catch (error) {
+        this.listLoading = false
+      }
     },
     handleDownload() {
       this.downloadLoading = true

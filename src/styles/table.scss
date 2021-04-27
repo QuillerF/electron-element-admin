@@ -1,0 +1,120 @@
+$h40: 40px;
+$h50: 50px;
+$border-color: #dcdfe6;
+$header-color: #4a4a4a;
+$cell-color: #606266;
+$font-size: 13px;
+$header-background-color: #f5f7fa;
+$header-background-color-fff: #fff;
+
+.ss-table {
+  border-color: $border-color;
+
+  // 有fix的表格，在不同分辨率下 固定列会错位
+  td,
+  th.is-leaf {
+    top: -2px;
+  }
+
+  &::before {
+    background-color: $border-color;
+  }
+  &::after {
+    background-color: $border-color;
+  }
+}
+
+// 单元格无图标
+//.ss-table-header-row {
+//  height: $h50;
+//}
+
+// 表头行高
+.ss-table-header-row {
+  height: $h50;
+}
+
+// 表头无颜色
+.ss-table-header-cell {
+  color: $header-color;
+  font-size: $font-size;
+  background-color: $header-background-color-fff;
+  border-color: $border-color !important;
+  //border-top: 1px solid;
+
+  .el-table {
+    background-color: $header-background-color-fff;
+  }
+}
+
+// 表头有颜色
+.ss-table-color-header-cell {
+  color: $header-color;
+  font-size: $font-size;
+  background-color: $header-background-color !important;
+  border-color: $border-color !important;
+  //border-top: 1px solid;
+
+  .el-table {
+    background-color: $header-background-color;
+  }
+}
+
+// 单元格无图标
+.ss-table-row {
+  height: $h40;
+}
+
+// 单元格有图标
+.ss-table-icon-row {
+  height: $h50;
+}
+
+.ss-table-cell {
+  color: $cell-color;
+  font-size: $font-size;
+  border-color: $border-color !important;
+  button {
+    margin: 0;
+    padding: 0 10px;
+    min-width: 56px;
+    height: 25px;
+    border-radius: 3px;
+  }
+  .cell.el-tooltip > .el-button--text {
+    width: 100%;
+  }
+}
+
+/*
+        文档地址：http://showdoc.sishuxuefu.com:38020/web/#/26?page_id=3502
+        样式一：
+        class="ss-table"
+        header-row-class-name="ss-table-header-row"
+        header-cell-class-name="ss-table-color-header-cell"
+        row-class-name="ss-table-row"
+        cell-class-name="ss-table-cell"
+
+        样式二：
+        class="ss-table"
+        header-row-class-name="ss-table-header-row"
+        header-cell-class-name="ss-table-color-header-cell"
+        row-class-name="ss-table-icon-row"
+        cell-class-name="ss-table-cell"
+
+        样式三、样式四、样式六：
+        class="ss-table"
+        header-row-class-name="ss-table-header-row"
+        header-cell-class-name="ss-table-header-cell"
+        row-class-name="ss-table-row"
+        cell-class-name="ss-table-cell"
+
+        样式五：
+        class="ss-table"
+        header-row-class-name="ss-table-header-row"
+        header-cell-class-name="ss-table-color-header-cell"
+        row-class-name="ss-table-row"
+        cell-class-name="ss-table-cell"
+        border
+
+ */

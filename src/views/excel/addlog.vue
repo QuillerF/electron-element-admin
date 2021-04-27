@@ -7,7 +7,15 @@
       <el-button type="warning" size="mini" class="mr20" @click="toCancel">注销</el-button>
       <el-button type="danger" size="mini" class="mr20" @click="toDelete">删除</el-button>
     </div>
-    <el-form ref="form" :model="form" :rules="rules" :disabled="isView" label-width="200px" :inline="true" size="mini">
+    <el-form
+      ref="form"
+      :model="form"
+      :rules="rules"
+      :disabled="viewType === 'view'"
+      label-width="200px"
+      :inline="true"
+      size="mini"
+    >
       <el-form-item v-for="(item, index) in columns" :key="index" :prop="item.prop" :label="item.label">
         <AddLogItem :item="item" @change="handleChange"></AddLogItem>
       </el-form-item>
@@ -37,7 +45,7 @@ export default {
   components: { AddLogItem, UploadImages },
   props: {},
   data() {
-    const { viewType } = this.$route.query
+    const { viewType = 'view' } = this.$route.query
     this.$route.meta.title = viewStatus[viewType] || '添加记录'
     return {
       columns: Columns.filter(item => item.addtype),
@@ -48,14 +56,51 @@ export default {
     }
   },
   computed: {},
+  watch: {
+    viewType(val) {
+      this.$route.meta.title = viewStatus[val] || '添加记录'
+    }
+  },
   created() {
     this.formatRules()
   },
   methods: {
-    toEdit() {},
-    toOut() {},
-    toCancel() {},
-    toDelete() {},
+    toEdit() {
+      this.viewType = 'edit'
+    },
+    toOut() {
+      this.$confirm('确认迁出此信息吗?', '提示', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          console.log('迁出')
+        })
+        .catch(() => {})
+    },
+    toCancel() {
+      this.$confirm('确认注销此信息吗?', '提示', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          console.log('注销')
+        })
+        .catch(() => {})
+    },
+    toDelete() {
+      this.$confirm('确认删除此信息吗?', '提示', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          console.log('删除')
+        })
+        .catch(() => {})
+    },
     handleChange(prop, val) {
       console.log(prop, val)
       this.$set(this.form, prop, val)

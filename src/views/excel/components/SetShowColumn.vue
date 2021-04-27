@@ -23,7 +23,7 @@ export default {
   },
   data() {
     return {
-      columns: Columns,
+      columns: Columns.slice(1),
       checkList: []
     }
   },
