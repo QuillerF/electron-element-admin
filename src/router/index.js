@@ -189,10 +189,17 @@ export const asyncRoutes = [
       },
       {
         path: 'addlog',
-        component: () => import('@/views/excel/addlog'),
-        name: 'Addlog',
+        component: () => import('@/views/excel/add-log-page'),
+        name: '添加记录',
         hidden: true,
         meta: { title: '添加记录' }
+      },
+      {
+        path: 'editlog',
+        component: () => import('@/views/excel/edit-log-page'),
+        name: '修改记录',
+        hidden: true,
+        meta: { title: '修改记录' }
       },
       {
         path: 'export-selected-excel',

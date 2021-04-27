@@ -52,9 +52,9 @@
 
 <script>
 import { cloneDeep } from 'lodash'
-import { Columns, addlogItems } from './Enum'
-import AddLogItem from './components/AddLogItem'
-import UploadImages from './components/UploadImages'
+import { Columns, addlogItems } from '../Enum'
+import AddLogItem from './AddLogItem'
+import UploadImages from './UploadImages'
 
 const viewStatus = {
   view: '查看记录',
@@ -64,16 +64,18 @@ const viewStatus = {
 
 export default {
   components: { AddLogItem, UploadImages },
-  props: {},
+  props: {
+    viewType: {
+      type: String,
+      default: 'add'
+    }
+  },
   data() {
-    const { viewType = 'view' } = this.$route.query
-    this.$route.meta.title = viewStatus[viewType] || '添加记录'
     return {
       columns: Columns.filter(item => item.addtype),
       addlogItems,
       form: {},
-      rules: {},
-      viewType
+      rules: {}
     }
   },
   computed: {
@@ -120,17 +122,13 @@ export default {
       return this.columns.filter(item => keys.includes(item.prop))
     }
   },
-  watch: {
-    viewType(val) {
-      this.$route.meta.title = viewStatus[val] || '添加记录'
-    }
-  },
+  watch: {},
   created() {
     this.formatRules()
   },
   methods: {
     toEdit() {
-      this.viewType = 'edit'
+      this.$router.push('/excel/edit-log-page')
     },
     toOut() {
       this.$confirm('确认迁出此信息吗?', '提示', {
