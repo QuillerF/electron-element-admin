@@ -21,7 +21,7 @@
       v-else-if="item.addtype === 'textarea'"
       v-model="textarea"
       :placeholder="item.placeholder"
-      :rows="4"
+      :rows="3"
       type="textarea"
       resize="none"
       style="width:200px"
@@ -62,7 +62,7 @@ export default {
   created() {},
   methods: {
     valueChange(val) {
-      this.$emit('change', this.item.prop, val)
+      this.$emit('change', [this.item.prop, val])
     }
   }
 }

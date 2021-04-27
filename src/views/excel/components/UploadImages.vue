@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="width:200px">
     <el-upload
       :accept="
         acceptType
@@ -196,6 +196,10 @@ export default {
 .avatar {
   width: 100%;
   height: 100%;
+}
+.el-upload {
+  width: 100px;
+  height: 100px;
 }
 
 .upload > div {

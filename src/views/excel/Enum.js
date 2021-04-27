@@ -32,33 +32,7 @@ const Columns = [
     required: true,
     rules: [{ min: 18, max: 18, message: '格式错误' }]
   },
-  {
-    label: '户主',
-    prop: 'houseHolderName',
-    isDefaultShow: true,
-    addtype: 'text',
-    required: true
-  },
-  {
-    label: '与户主关系',
-    prop: 'hhRelation',
-    isDefaultShow: true,
-    options: [
-      { label: '本人' },
-      { label: '配偶、' },
-      { label: '子' },
-      { label: '女' },
-      { label: '(外)孙子女' },
-      { label: '父' },
-      { label: '母' },
-      { label: '兄弟姐妹' },
-      { label: '重孙子女' },
-      { label: '儿媳' },
-      { label: '女婿' }
-    ],
-    addtype: 'select',
-    required: true
-  },
+
   {
     label: '组别',
     prop: 'groupName',
@@ -78,12 +52,7 @@ const Columns = [
     addtype: 'select',
     required: true
   },
-  {
-    label: '户号',
-    prop: 'hhRegistryNo',
-    addtype: 'text',
-    required: true
-  },
+
   {
     label: '民族',
     prop: 'nation',
@@ -136,30 +105,6 @@ const Columns = [
     required: true
   },
   {
-    label: '是否贫困家庭',
-    prop: 'isPoverty',
-    isFilter: true,
-    options: [{ label: '是' }, { label: '否' }],
-    addtype: 'select',
-    required: true
-  },
-  {
-    label: '是否低保',
-    prop: 'isLowIncome',
-    isFilter: true,
-    options: [{ label: '是' }, { label: '否' }],
-    addtype: 'select',
-    required: true
-  },
-  {
-    label: '是否五保',
-    prop: 'isFiveGuarantee',
-    isFilter: true,
-    options: [{ label: '是' }, { label: '否' }],
-    addtype: 'select',
-    required: true
-  },
-  {
     label: '是否独生子女',
     prop: 'isOnlyChild',
     isFilter: true,
@@ -170,14 +115,6 @@ const Columns = [
   {
     label: '兵役情况',
     prop: 'military',
-    isFilter: true,
-    options: [{ label: '是' }, { label: '否' }],
-    addtype: 'select',
-    required: true
-  },
-  {
-    label: '是否军属家庭',
-    prop: 'isMilitaryFamily',
     isFilter: true,
     options: [{ label: '是' }, { label: '否' }],
     addtype: 'select',
@@ -207,6 +144,85 @@ const Columns = [
     addtype: 'text'
   },
   {
+    label: '户籍地址',
+    prop: 'residenceAddress',
+    addtype: 'textarea',
+    required: true
+  },
+  {
+    label: '居住地址',
+    prop: 'residentialAddress',
+    addtype: 'textarea',
+    required: true
+  },
+  {
+    label: '户号',
+    prop: 'hhRegistryNo',
+    addtype: 'text',
+    required: true
+  },
+  {
+    label: '户主',
+    prop: 'houseHolderName',
+    isDefaultShow: true,
+    addtype: 'text',
+    required: true
+  },
+  {
+    label: '与户主关系',
+    prop: 'hhRelation',
+    isDefaultShow: true,
+    options: [
+      { label: '本人' },
+      { label: '配偶、' },
+      { label: '子' },
+      { label: '女' },
+      { label: '(外)孙子女' },
+      { label: '父' },
+      { label: '母' },
+      { label: '兄弟姐妹' },
+      { label: '重孙子女' },
+      { label: '儿媳' },
+      { label: '女婿' }
+    ],
+    addtype: 'select',
+    required: true
+  },
+  {
+    label: '是否贫困家庭',
+    prop: 'isPoverty',
+    isFilter: true,
+    options: [{ label: '是' }, { label: '否' }],
+    addtype: 'select',
+    required: true
+  },
+  {
+    label: '是否低保',
+    prop: 'isLowIncome',
+    isFilter: true,
+    options: [{ label: '是' }, { label: '否' }],
+    addtype: 'select',
+    required: true
+  },
+  {
+    label: '是否五保',
+    prop: 'isFiveGuarantee',
+    isFilter: true,
+    options: [{ label: '是' }, { label: '否' }],
+    addtype: 'select',
+    required: true
+  },
+
+  {
+    label: '是否军属家庭',
+    prop: 'isMilitaryFamily',
+    isFilter: true,
+    options: [{ label: '是' }, { label: '否' }],
+    addtype: 'select',
+    required: true
+  },
+
+  {
     label: '家庭年收入',
     prop: 'familyIncome',
     isFilter: true,
@@ -230,18 +246,7 @@ const Columns = [
   //   addtype: 'textarea',
   //   placeholder: '至多200字'
   // },
-  {
-    label: '户籍地址',
-    prop: 'residenceAddress',
-    addtype: 'textarea',
-    required: true
-  },
-  {
-    label: '居住地址',
-    prop: 'residentialAddress',
-    addtype: 'textarea',
-    required: true
-  },
+
   {
     label: '是否迁入',
     prop: 'isMoveIn',
@@ -268,7 +273,7 @@ const Columns = [
 
 const ChangeLogsColumns = [
   {
-    label: '身份证号',
+    label: '姓名',
     prop: 'name'
   },
   {

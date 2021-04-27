@@ -16,12 +16,33 @@
       :inline="true"
       size="mini"
     >
-      <el-form-item v-for="(item, index) in columns" :key="index" :prop="item.prop" :label="item.label">
+      <h3>个人信息</h3>
+      <el-form-item v-for="item in personalColumns" :key="item.prop" :prop="item.prop" :label="item.label">
         <AddLogItem :item="item" @change="handleChange"></AddLogItem>
       </el-form-item>
-      <el-form-item v-for="(item, index) in addlogItems" :key="index + 'idcard'" :prop="item.prop" :label="item.label">
-        <UploadImages></UploadImages>
+      <div></div>
+      <el-form-item v-for="item in addressColumns" :key="item.prop" :prop="item.prop" :label="item.label">
+        <AddLogItem :item="item" @change="handleChange"></AddLogItem>
       </el-form-item>
+      <div>
+        <el-form-item
+          v-for="(item, index) in addlogItems"
+          :key="index + 'idcard'"
+          :prop="item.prop"
+          :label="item.label"
+        >
+          <UploadImages></UploadImages>
+        </el-form-item>
+      </div>
+      <h3>家庭信息</h3>
+      <el-form-item v-for="item in familyColumns" :key="item.prop" :prop="item.prop" :label="item.label">
+        <AddLogItem :item="item" @change="handleChange"></AddLogItem>
+      </el-form-item>
+      <h3>其他信息</h3>
+      <el-form-item v-for="item in otherColumns" :key="item.prop" :prop="item.prop" :label="item.label">
+        <AddLogItem :item="item" @change="handleChange"></AddLogItem>
+      </el-form-item>
+
       <div class="flex-ac">
         <el-button type="primary" style="width:100px" @click="onSubmit">提交</el-button>
       </div>
@@ -55,7 +76,50 @@ export default {
       viewType
     }
   },
-  computed: {},
+  computed: {
+    personalColumns() {
+      const keys = [
+        'name',
+        'gender',
+        'idCardNo',
+        'phone',
+        'birthday',
+        'insurance',
+        'groupName',
+        'nation',
+        'marriage',
+        'military',
+        'politicalStatus',
+        'religion',
+        'wordType',
+        'isOnlyChild',
+        'education'
+      ]
+      return this.columns.filter(item => keys.includes(item.prop))
+    },
+    addressColumns() {
+      const keys = ['residenceAddress', 'residentialAddress']
+      return this.columns.filter(item => keys.includes(item.prop))
+    },
+    familyColumns() {
+      const keys = [
+        'hhRegistryNo',
+        'houseHolderName',
+        'hhRelation',
+        'familyIncome',
+        'isPoverty',
+        'isLowIncome',
+        'isFiveGuarantee',
+        'isMilitaryFamily',
+        'farmlandMu'
+      ]
+      return this.columns.filter(item => keys.includes(item.prop))
+    },
+    otherColumns() {
+      const keys = this.form.isMoveIn === '是' ? ['isMoveIn', 'moveInReason', 'remark'] : ['isMoveIn', 'remark']
+      return this.columns.filter(item => keys.includes(item.prop))
+    }
+  },
   watch: {
     viewType(val) {
       this.$route.meta.title = viewStatus[val] || '添加记录'
@@ -101,7 +165,9 @@ export default {
         })
         .catch(() => {})
     },
-    handleChange(prop, val) {
+
+    handleChange(vals = []) {
+      const [prop, val] = vals
       console.log(prop, val)
       this.$set(this.form, prop, val)
     },
@@ -131,5 +197,8 @@ export default {
 <style lang="scss" scoped>
 .addlog {
   padding: 20px;
+}
+h3 {
+  padding-left: 200px;
 }
 </style>
