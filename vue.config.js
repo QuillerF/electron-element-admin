@@ -29,6 +29,19 @@ module.exports = {
   assetsDir: 'static',
   lintOnSave: process.env.NODE_ENV === 'development',
   productionSourceMap: false,
+  pluginOptions: {
+    electronBuilder: {
+      builderOptions: {
+        productName: '荆王村村委会',
+        appId: 'com.xiaoxiong.id',
+        win: {
+          icon: './favicon.ico'
+        }
+
+        // options placed here will be merged with default configuration and passed to electron-builder
+      }
+    }
+  },
   devServer: {
     port: port,
     open: true,

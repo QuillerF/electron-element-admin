@@ -1,9 +1,9 @@
 import { login, logout } from '@/api/user'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+// import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
 const state = {
-  token: getToken(),
+  token: '',
   userInfo: {},
   name: '',
   avatar: '',
@@ -41,7 +41,7 @@ const actions = {
         .then(response => {
           const data = response
           console.log('response,respone', response)
-          setToken(data.roleId)
+          // setToken(data.roleId)
           commit('SET_TOKEN', data.roleId)
           commit('SET_USER', data)
           resolve()
@@ -58,9 +58,7 @@ const actions = {
     //   commit('SET_ROLES', ['admin'])
     // }
     return new Promise((resolve, reject) => {
-      const { userInfo: data } = state
-
-      if (!getToken()) {
+      if (!state.token) {
         reject('Verification failed, please Login again.')
       }
 
@@ -85,7 +83,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       commit('SET_TOKEN', '')
       commit('SET_ROLES', [])
-      removeToken()
+      // removeToken()
       resetRouter()
 
       // reset visited views and cached views
@@ -101,7 +99,7 @@ const actions = {
     return new Promise(resolve => {
       commit('SET_TOKEN', '')
       commit('SET_ROLES', [])
-      removeToken()
+      // removeToken()
       resolve()
     })
   },
@@ -111,9 +109,9 @@ const actions = {
     const token = role + '-token'
 
     commit('SET_TOKEN', token)
-    setToken(token)
+    // setToken(token)
 
-    const { roles } = await dispatch('getInfo')
+    const roles = await dispatch('getInfo')
 
     resetRouter()
 
