@@ -40,6 +40,10 @@ export default {
   name: 'UploadImage',
   components: {},
   props: {
+    item: {
+      type: Object,
+      default: () => {}
+    },
     acceptType: {
       type: Number,
       default: 0
@@ -173,13 +177,13 @@ export default {
     async uploadImage({ file }) {
       console.log('file=====>', file)
       const filebase64 = await compressImage(file.path)
-      console.log('filebase64===>', filebase64)
-      const url = await qiniu.uploadPicToQiniu(filebase64)
+      // console.log('filebase64===>', filebase64)
+      // const url = await qiniu.uploadPicToQiniu(filebase64)
       if (this.showFileList) {
-        const { uid, name, size } = file
-        this.$emit('uploadImage', this.uploadImageList.concat({ uid, url, name, size }))
+        // const { uid, name, size } = file
+        this.$emit('change', [this.item.prop, filebase64])
       } else {
-        this.$emit('uploadImage', [{ url, name: file.name }])
+        this.$emit('change', [this.item.prop, filebase64])
       }
     },
     handleExceed() {

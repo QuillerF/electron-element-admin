@@ -1,12 +1,7 @@
 <!-- 信息录入 -->
 <template>
   <div class="addlog">
-    <div v-if="viewType === 'view'" class="flex-ar mb20">
-      <el-button type="primary" size="mini" class="mr20" @click="toEdit">修改</el-button>
-      <el-button type="primary" size="mini" class="mr20" @click="toOut">迁出</el-button>
-      <el-button type="warning" size="mini" class="mr20" @click="toCancel">注销</el-button>
-      <el-button type="danger" size="mini" class="mr20" @click="toDelete">删除</el-button>
-    </div>
+    <!-- <div v-if="viewType === 'view'" class="flex-ar mb20"> -->
     <el-form
       ref="form"
       :model="form"
@@ -18,11 +13,11 @@
     >
       <h3>个人信息</h3>
       <el-form-item v-for="item in personalColumns" :key="item.prop" :prop="item.prop" :label="item.label">
-        <AddLogItem :item="item" @change="handleChange"></AddLogItem>
+        <AddLogItem :item="item" :value="formatValue(item.prop)" @change="handleChange"></AddLogItem>
       </el-form-item>
       <div></div>
       <el-form-item v-for="item in addressColumns" :key="item.prop" :prop="item.prop" :label="item.label">
-        <AddLogItem :item="item" @change="handleChange"></AddLogItem>
+        <AddLogItem :item="item" :value="formatValue(item.prop)" @change="handleChange"></AddLogItem>
       </el-form-item>
       <div>
         <el-form-item
@@ -31,20 +26,38 @@
           :prop="item.prop"
           :label="item.label"
         >
-          <UploadImages></UploadImages>
+          <UploadImages :item="item" :limit="1" :value="formatValue(item.prop)" @change="handleChange"></UploadImages>
         </el-form-item>
       </div>
       <h3>家庭信息</h3>
       <el-form-item v-for="item in familyColumns" :key="item.prop" :prop="item.prop" :label="item.label">
-        <AddLogItem :item="item" @change="handleChange"></AddLogItem>
+        <AddLogItem :item="item" :value="formatValue(item.prop)" @change="handleChange"></AddLogItem>
       </el-form-item>
       <h3>其他信息</h3>
       <el-form-item v-for="item in otherColumns" :key="item.prop" :prop="item.prop" :label="item.label">
-        <AddLogItem :item="item" @change="handleChange"></AddLogItem>
+        <AddLogItem :item="item" :value="formatValue(item.prop)" @change="handleChange"></AddLogItem>
       </el-form-item>
+      <h3>家庭成员列表</h3>
+      <el-table :data="list" align="center" border style="width: 100%">
+        <el-table-column prop="prop" align="center" label="姓名"> </el-table-column>
+        <el-table-column prop="prop" align="center" label="户号"> </el-table-column>
+        <el-table-column prop="prop" align="center" label="村组"> </el-table-column>
+        <el-table-column prop="prop" align="center" label="身份证号"> </el-table-column>
+        <el-table-column prop="prop" align="center" label="联系方式"> </el-table-column>
+        <el-table-column prop="prop" align="center" label="户主"> </el-table-column>
+        <el-table-column prop="prop" align="center" label="与户主关系"> </el-table-column>
+        <el-table-column prop="prop" align="center" label="操作" width="200">
+          <template slot-scope="scope">
+            <el-button type="text" size="default" @click="toDetail(scope.row)">详情</el-button>
+            <el-button type="text" size="default" @click="toDetail(scope.row, 'edit')">修改</el-button>
+            <el-button type="text" size="default" @click="toDelete(scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
 
-      <div class="flex-ac">
-        <el-button type="primary" style="width:100px" @click="onSubmit">提交</el-button>
+      <div class="flex-ac mt20">
+        <el-button v-if="viewType === 'edit'" type="primary" style="width:100px" @click="onSubmit">提交</el-button>
+        <el-button v-if="viewType === 'add'" type="primary" style="width:100px" @click="onSubmitAdd">提交</el-button>
       </div>
     </el-form>
   </div>
@@ -52,6 +65,8 @@
 
 <script>
 import { cloneDeep } from 'lodash'
+import Excel from '@/api/excel'
+import Admin from '@/api/admin'
 import { Columns, addlogItems } from '../Enum'
 import AddLogItem from './AddLogItem'
 import UploadImages from './UploadImages'
@@ -68,12 +83,17 @@ export default {
     viewType: {
       type: String,
       default: 'add'
+    },
+    detail: {
+      type: Object,
+      default: () => {}
     }
   },
   data() {
     return {
       columns: Columns.filter(item => item.addtype),
       addlogItems,
+      list: [],
       form: {},
       rules: {}
     }
@@ -124,44 +144,19 @@ export default {
   },
   watch: {},
   created() {
-    this.formatRules()
+    this.getGroup()
   },
   methods: {
-    toEdit() {
-      this.$router.push('/excel/edit-log-page')
+    async getGroup() {
+      const res = Admin.ADMIN_GROUPS()
+      this.groups = res
+      this.formatRules()
     },
-    toOut() {
-      this.$confirm('确认迁出此信息吗?', '提示', {
-        confirmButtonText: '确认',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-          console.log('迁出')
-        })
-        .catch(() => {})
+    formatValue(prop) {
+      return this.detail ? this.detail[prop] : ''
     },
-    toCancel() {
-      this.$confirm('确认注销此信息吗?', '提示', {
-        confirmButtonText: '确认',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-          console.log('注销')
-        })
-        .catch(() => {})
-    },
-    toDelete() {
-      this.$confirm('确认删除此信息吗?', '提示', {
-        confirmButtonText: '确认',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-          console.log('删除')
-        })
-        .catch(() => {})
+    toDetail(row, type = 'readonly') {
+      this.$router.push({ path: '/excel/addlog', params: { row, type } })
     },
 
     handleChange(vals = []) {
@@ -173,19 +168,45 @@ export default {
       this.$refs.form.validate(async bool => {
         if (bool) {
           console.log(this.form)
+          const params = { ...this.detail, ...this.form }
+          await Excel.VILLAGER_MANAGER_UPDATE_ONE(params)
+          this.$message({
+            message: '修改成功',
+            type: 'success'
+          })
+        }
+      })
+    },
+    onSubmitAdd() {
+      this.$refs.form.validate(async bool => {
+        if (bool) {
+          console.log(this.form)
+          const params = { ...this.form, ...{ groupId: this.form.groupName } }
+          await Excel.VILLAGER_MANAGER_ADD_ONE(params)
+          this.$message({
+            message: '添加成功',
+            type: 'success'
+          })
         }
       })
     },
     formatRules() {
       const obj = {}
       const allrules = this.columns.forEach(item => {
-        const rules = item.required ? [{ required: true, message: `请输入${item.label}` }] : []
+        const rules = item.required ? [{ required: true, message: `请输入${item.label}`, trigger: 'blur' }] : []
         if (item.rules) {
           rules.push(...item.rules)
         }
         obj[item.prop] = rules
+        if (item.prop === 'groupName') {
+          item.options = [
+            {
+              label: this.$store.state.user.userInfo.groupName,
+              value: this.$store.state.user.userInfo.groupId
+            }
+          ]
+        }
       })
-      console.log('rules', obj)
       this.rules = obj
     }
   }

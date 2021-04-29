@@ -3,7 +3,7 @@
   <div>
     <el-form ref="form" :model="form" label-width="120px" :inline="true" size="mini">
       <el-form-item v-for="(item, index) in columns" :key="item.prop + index" :label="item.label">
-        <FilterBoxItem :item="item"></FilterBoxItem>
+        <FilterBoxItem :item="item" @change="valueChange"></FilterBoxItem>
       </el-form-item>
       <div class="flex-ac">
         <el-button type="primary" style="width:100px" @click="onSubmit">搜索</el-button>
@@ -22,16 +22,25 @@ export default {
   props: {},
   data() {
     return {
-      columns: Columns.filter(item => item.isFilter),
       form: {}
     }
   },
-  computed: {},
+  computed: {
+    columns() {
+      const arr = Columns.filter(item => item.isFilter)
+      if (this.$store.state.user.token === 'super-admin') {
+        return arr
+      }
+      return arr.filter(item => item.prop !== 'groupName')
+    }
+  },
   created() {},
   methods: {
+    valueChange({ prop, value }) {
+      this.form[prop] = value
+    },
     onSubmit() {
-      const newroles = this.columns.filter(item => this.checkList.includes(item.prop))
-      this.$emit('change', newroles)
+      this.$emit('change', cloneDeep(this.form))
     }
   }
 }

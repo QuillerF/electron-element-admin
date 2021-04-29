@@ -7,7 +7,7 @@
       type="date"
       style="width:200px"
       placeholde="请选择日期"
-      @change="valueChange"
+      @change="valueChange(date)"
     ></el-date-picker>
     <el-input
       v-else-if="item.addtype === 'text'"
@@ -15,7 +15,7 @@
       style="width:200px"
       :placeholder="item.placeholder"
       clearable
-      @blur="valueChange"
+      @blur="valueChange(text)"
     ></el-input>
     <el-input
       v-else-if="item.addtype === 'textarea'"
@@ -26,9 +26,9 @@
       resize="none"
       style="width:200px"
       clearable
-      @blur="valueChange"
+      @blur="valueChange(textarea)"
     ></el-input>
-    <el-select v-else v-model="select" style="width:200px" clearable @change="valueChange">
+    <el-select v-else v-model="select" style="width:200px" clearable @change="valueChange(select)">
       <el-option
         v-for="(op, index) in item.options"
         :key="index"
@@ -47,6 +47,10 @@ export default {
     item: {
       type: Object,
       default: () => {}
+    },
+    value: {
+      type: [String, Array, Object, Number],
+      default: ''
     }
   },
   data() {
@@ -58,7 +62,15 @@ export default {
     }
   },
   computed: {},
-  watch: {},
+  watch: {
+    value(val) {
+      this.text = val
+      this.textarea = val
+      this.date = val
+      this.select = val
+      this.$emit('change', [this.item.prop, val])
+    }
+  },
   created() {},
   methods: {
     valueChange(val) {

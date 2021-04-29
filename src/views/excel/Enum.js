@@ -5,7 +5,6 @@ const Columns = [
     label: '姓名',
     prop: 'name',
     fixed: true,
-    isDefaultShow: true,
     addtype: 'text',
     placeholder: '2-10个汉字',
     required: true
@@ -29,8 +28,7 @@ const Columns = [
     prop: 'idCardNo',
     isDefaultShow: true,
     addtype: 'text',
-    required: true,
-    rules: [{ min: 18, max: 18, message: '格式错误' }]
+    required: true
   },
 
   {

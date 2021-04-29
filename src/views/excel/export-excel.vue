@@ -14,16 +14,15 @@
         clearable
       ></el-input>
       <el-button type="primary" icon="el-icon-search" class="mr20" @click="fetchData">搜索</el-button>
-      <el-button :loading="downloadLoading" class="mr20" type="primary" icon="el-icon-document" @click="handleDownload">
-        导出表格
-      </el-button>
-
       <el-popover placement="bottom" title="筛选项" width="700" trigger="click">
         <FilterBox @change="paramsChange"></FilterBox>
         <el-button slot="reference" type="text" class="mr20" style="font-size:20px;color:#1684FC" @click="showFilterBox"
           ><svg-icon icon-class="filter"
         /></el-button>
       </el-popover>
+      <el-button :loading="downloadLoading" class="mr20" type="text" @click="handleDownload">
+        导出表格
+      </el-button>
       <el-button type="text" class="mr20" @click="toAddLogs">添加记录</el-button>
       <el-popover placement="bottom" title="配置显示列" width="500" trigger="click">
         <SetShowColumn :real-columns="columns" @change="columnsChange"></SetShowColumn>
@@ -38,19 +37,16 @@
       :data="list"
       stripe
       element-loading-text="Loading..."
-      class="ss-table"
-      header-row-class-name="ss-table-header-row"
-      header-cell-class-name="ss-table-color-header-cell"
       border
       fit
       highlight-current-row
     >
-      <el-table-column align="center" fixed label="Id" width="95">
+      <el-table-column align="center" fixed label="序号" width="60">
         <template slot-scope="scope">
-          {{ scope.$index }}
+          {{ scope.$index + 1 }}
         </template>
       </el-table-column>
-      <el-table-column label="姓名" align="center" fixed prop="title"> </el-table-column>
+      <el-table-column label="姓名" align="center" fixed prop="name"> </el-table-column>
       <el-table-column
         v-for="fruit in columns"
         :key="fruit.prop"
@@ -61,7 +57,7 @@
       </el-table-column>
       <el-table-column align="center" fixed="right" label="操作" width="200">
         <template slot-scope="scope">
-          <el-button type="text" size="default" @click="toDetail(scope.row)">详情</el-button>
+          <el-button type="text" size="default" @click="toDetail(scope.row, 'view')">详情</el-button>
           <el-button type="text" size="default" @click="toDetail(scope.row, 'edit')">修改</el-button>
           <el-button type="text" size="default" @click="toDelete(scope.row)">删除</el-button>
         </template>
@@ -71,7 +67,7 @@
       v-show="total > 0"
       :total="total"
       :page.sync="params.page"
-      :limit.sync="params.limit"
+      :limit.sync="params.size"
       @pagination="fetchData"
     />
   </div>
@@ -79,7 +75,7 @@
 
 <script>
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
-import { fetchList } from '@/api/article'
+import Excel from '@/api/excel'
 import { parseTime } from '@/utils'
 import SetShowColumn from './components/SetShowColumn'
 import FilterBox from './components/FilterBox'
@@ -100,15 +96,36 @@ export default {
       bookType: 'xlsx',
       isShowSetColumn: false,
       params: {
+        birthdayEndDate: '',
+        birthdayStartDate: '',
+        education: '',
+        familyIncomeEnd: 0,
+        familyIncomeStart: 0,
+        farmlandMuEnd: '',
+        farmlandMuStart: '',
+        groupName: '',
+        insurance: '',
+        isFiveGuarantee: '',
+        isLowIncome: '',
+        isMilitaryFamily: '',
+        isOnlyChild: '',
+        isPoverty: '',
+        marriage: '',
+        nation: '',
+        orderBy: '',
+        politicalStatus: '',
+        religion: '',
+        searchName: '',
         page: 1,
-        limit: 50,
-        sort: '户号排序',
-        name: ''
+        size: 50
       }
     }
   },
   created() {
     this.fetchData()
+  },
+  activated() {
+    this.$refs.table.doLayout()
   },
   methods: {
     paramsChange(val = {}) {
@@ -123,8 +140,16 @@ export default {
         .then(() => {})
         .catch(() => {})
     },
-    toDetail(row, type = 'readonly') {
-      this.$router.push({ path: '/excel/addlog', params: { row, type } })
+    toDetail(row, type = 'view') {
+      if (type === 'add') {
+        this.$router.push({ path: '/excel/addlog', query: { id: row.id, viewType: type } })
+        return
+      }
+      if (type === 'edit') {
+        this.$router.push({ path: '/excel/editlog', query: { id: row.id, viewType: type } })
+        return
+      }
+      this.$router.push({ path: '/excel/viewlog', query: { id: row.id, viewType: type } })
     },
     columnsChange(val) {
       this.columns = val
@@ -144,8 +169,9 @@ export default {
     async fetchData() {
       try {
         this.listLoading = true
-        const res = await fetchList()
-        this.list = res.data.items
+        const { data, total } = await Excel.VILLAGER_MANAGER_LIST(this.params)
+        this.list = data
+        this.total = total
         this.listLoading = false
       } catch (error) {
         this.listLoading = false
@@ -154,8 +180,8 @@ export default {
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['Id', 'Title', 'Author', 'Readings', 'Date']
-        const filterVal = ['id', 'title', 'author', 'pageviews', 'display_time']
+        const tHeader = ['姓名'].push(...this.columns.map(item => item.label))
+        const filterVal = ['name'].push(...this.columns.map(item => item.prop))
         const list = this.list
         const data = this.formatJson(filterVal, list)
         excel.export_json_to_excel({

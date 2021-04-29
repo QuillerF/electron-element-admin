@@ -91,48 +91,6 @@ export const constantRoutes = [
  * the routes that need to be dynamically loaded based on user roles
  */
 export const asyncRoutes = [
-  {
-    path: '/permission',
-    component: Layout,
-    redirect: '/permission/role',
-    alwaysShow: true, // will always show the root menu
-    name: 'Permission',
-    meta: {
-      title: '成员管理',
-      icon: 'el-icon-s-custom'
-    },
-    children: [
-      // {
-      //   path: 'page',
-      //   component: () => import('@/views/permission/page'),
-      //   name: '页面鉴权',
-      //   meta: {
-      //     title: 'Page Permission',
-      //     roles: ['admin'] // or you can only set roles in sub nav
-      //   }
-      // },
-
-      {
-        path: 'role',
-        component: () => import('@/views/permission/role'),
-        name: '成员列表',
-        meta: {
-          title: '成员列表',
-          roles: ['super-admin']
-        }
-      },
-      {
-        path: 'editpassword',
-        component: () => import('@/views/permission/editpassword'),
-        name: '修改密码',
-        meta: {
-          title: '修改密码'
-          // if do not set roles, means: this page does not require permission
-        }
-      }
-    ]
-  },
-
   /** when your routing map is too long, you can split it into small modules **/
   // componentsRouter,
   // chartsRouter,
@@ -202,6 +160,13 @@ export const asyncRoutes = [
         meta: { title: '修改记录' }
       },
       {
+        path: 'viewlog',
+        component: () => import('@/views/excel/view-log-page'),
+        name: '查看记录',
+        hidden: true,
+        meta: { title: '查看记录' }
+      },
+      {
         path: 'export-selected-excel',
         component: () => import('@/views/excel/select-excel'),
         name: 'SelectExcel',
@@ -218,6 +183,47 @@ export const asyncRoutes = [
         component: () => import('@/views/excel/upload-excel'),
         name: 'UploadExcel',
         meta: { title: '批量导入' }
+      }
+    ]
+  },
+  {
+    path: '/permission',
+    component: Layout,
+    redirect: '/permission/role',
+    alwaysShow: true, // will always show the root menu
+    name: 'Permission',
+    meta: {
+      title: '成员管理',
+      icon: 'el-icon-s-custom'
+    },
+    children: [
+      // {
+      //   path: 'page',
+      //   component: () => import('@/views/permission/page'),
+      //   name: '页面鉴权',
+      //   meta: {
+      //     title: 'Page Permission',
+      //     roles: ['admin'] // or you can only set roles in sub nav
+      //   }
+      // },
+
+      {
+        path: 'role',
+        component: () => import('@/views/permission/role'),
+        name: '成员列表',
+        meta: {
+          title: '成员列表',
+          roles: ['super-admin']
+        }
+      },
+      {
+        path: 'editpassword',
+        component: () => import('@/views/permission/editpassword'),
+        name: '修改密码',
+        meta: {
+          title: '修改密码'
+          // if do not set roles, means: this page does not require permission
+        }
       }
     ]
   },
