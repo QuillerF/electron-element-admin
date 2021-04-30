@@ -111,20 +111,65 @@ export function VILLAGER_MANAGER_DETAIL(villagerId) {
 	"isPoverty": "",
 	"marriage": "",
 	"nation": "",
-	"orderBy": "",
-	"page": 0,
 	"politicalStatus": "",
 	"religion": "",
 	"searchName": "",
+	"orderBy": "",
+	"page": 0,
 	"size": 0
  *
  */
 
 export function VILLAGER_MANAGER_LIST(data) {
-  return request({
-    url: 'villager/manager/list',
-    method: 'post',
-    data
+  // return request({
+  //   url: 'villager/manager/list',
+  //   method: 'post',
+  //   data
+  // })
+  return Promise.resolve({
+    total: 30,
+    data: [
+      {
+        birthday: '2018-5-2',
+        education: '小学',
+        familyIncome: 2000,
+        farmlandMu: 10,
+        farmlandRemark: 'ad',
+        gender: '男',
+        groupId: '123',
+        groupName: '一组',
+        hhRegistryMaster: '阿道夫',
+        hhRegistryNo: '阿道夫',
+        hhRegistrySelf: 'adsf',
+        hhRelation: '阿道夫',
+        houseHolderName: '阿斯蒂芬',
+        id: '2asdfasfsdf ',
+        idCardBack: 'asdf',
+        idCardFront: 'adfaf',
+        idCardNo: 'adfasfd',
+        insurance: '是',
+        isFiveGuarantee: '是',
+        isLowIncome: '是',
+        isMilitaryFamily: '是',
+        isMoveIn: '是',
+        isOnlyChild: '是',
+        isPoverty: '是',
+        marriage: '阿道夫',
+        military: '阿斯蒂芬',
+        moveInDate: 'adf',
+        moveInReason: 'asdf',
+        moveInRemark: '阿斯蒂芬',
+        name: '阿斯蒂芬',
+        nation: '阿斯蒂芬',
+        phone: '按地方撒',
+        politicalStatus: 'asdf',
+        religion: '阿斯蒂芬',
+        remark: '阿斯蒂芬',
+        residenceAddress: 'asd发送到',
+        residentialAddress: '阿斯蒂芬',
+        wordType: 'asd '
+      }
+    ]
   })
 }
 

@@ -7,7 +7,7 @@
       type="daterange"
       start-placeholde="开始日期"
       end-placeholde="结束日期"
-      @change="handleChange"
+      @change="handleChange(daterange)"
     ></el-date-picker>
     <div v-else-if="item.type === 'numrange'">
       <el-input-number
@@ -18,7 +18,7 @@
         :controls="false"
         placeholder="不限"
         controls-position="both"
-        @blur="handleChange"
+        @change="numRangeChange"
       >
       </el-input-number>
       <span class="mr20 ml20">至</span>
@@ -30,7 +30,7 @@
         :controls="false"
         placeholder="不限"
         controls-position="both"
-        @blur="handleChange"
+        @change="numRangeChange"
       >
       </el-input-number>
     </div>
@@ -41,7 +41,7 @@
       collapse-tags
       placeholder="不限"
       clearable
-      @change="handleChange"
+      @change="handleChange(values)"
     >
       <el-option
         v-for="(op, index) in item.options"
@@ -87,6 +87,11 @@ export default {
   methods: {
     handleChange(value) {
       const { prop } = this.item
+      this.$emit('change', { prop, value })
+    },
+    numRangeChange() {
+      const { prop } = this.item
+      const value = [this.min, this.max]
       this.$emit('change', { prop, value })
     }
   }

@@ -1,12 +1,12 @@
 <template>
   <div class="app-container">
     <div class="flex-ar mb20">
-      <el-select v-model="params.sort" placeholder="" class="mr20" style="width:250px" clearable>
+      <el-select v-model="params.orderBy" placeholder="" class="mr20" style="width:250px">
         <el-option label="户号排序" value="户号排序"> </el-option>
         <el-option label="最近修改" value="最近修改"> </el-option>
       </el-select>
       <el-input
-        v-model="params.name"
+        v-model="params.searchName"
         prefix-icon="el-icon-search"
         class="mr20"
         placeholder="姓名、联系方式、户号"
@@ -80,6 +80,7 @@ import { parseTime } from '@/utils'
 import SetShowColumn from './components/SetShowColumn'
 import FilterBox from './components/FilterBox'
 import { Columns } from './Enum'
+import { export_json_to_excel } from '@/vendor/Export2Excel'
 
 export default {
   name: 'ExportExcel',
@@ -87,7 +88,7 @@ export default {
   data() {
     return {
       columns: Columns.filter(item => item.isDefaultShow),
-      list: null,
+      list: [],
       total: 10,
       listLoading: true,
       downloadLoading: false,
@@ -112,9 +113,9 @@ export default {
         isPoverty: '',
         marriage: '',
         nation: '',
-        orderBy: '',
         politicalStatus: '',
         religion: '',
+        orderBy: '户号排序',
         searchName: '',
         page: 1,
         size: 50
@@ -130,6 +131,8 @@ export default {
   methods: {
     paramsChange(val = {}) {
       Object.assign(this.params, val)
+      console.log(this.params)
+      this.fetchData()
     },
     toDelete() {
       this.$confirm('确认删除该条信息吗?', '提示', {
@@ -177,22 +180,24 @@ export default {
         this.listLoading = false
       }
     },
-    handleDownload() {
+    async handleDownload() {
       this.downloadLoading = true
-      import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['姓名'].push(...this.columns.map(item => item.label))
-        const filterVal = ['name'].push(...this.columns.map(item => item.prop))
-        const list = this.list
-        const data = this.formatJson(filterVal, list)
-        excel.export_json_to_excel({
-          header: tHeader,
-          data,
-          filename: this.filename,
-          autoWidth: this.autoWidth,
-          bookType: this.bookType
-        })
-        this.downloadLoading = false
+      if (!Array.isArray(this.columns)) return
+      const cls = this.columns.map(item => item.label)
+      const clsp = this.columns.map(item => item.prop)
+      const tHeader = ['姓名', ...cls]
+      const filterVal = ['name', ...clsp]
+      console.log('cl,clsp===>', tHeader, filterVal)
+      const list = this.list
+      const data = this.formatJson(filterVal, list)
+      export_json_to_excel({
+        header: tHeader,
+        data,
+        filename: this.filename,
+        autoWidth: this.autoWidth,
+        bookType: this.bookType
       })
+      this.downloadLoading = false
     },
     formatJson(filterVal, jsonData) {
       return jsonData.map(v =>

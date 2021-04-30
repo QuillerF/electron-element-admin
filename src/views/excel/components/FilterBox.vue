@@ -37,7 +37,29 @@ export default {
   created() {},
   methods: {
     valueChange({ prop, value }) {
-      this.form[prop] = value
+      switch (prop) {
+        case 'birthday': {
+          const [start, end] = value || []
+          this.form.birthdayStartDate = start
+          this.form.birthdayEndDate = end
+          break
+        }
+        case 'familyIncome': {
+          const [start, end] = value || []
+          this.form.familyIncomeStart = start
+          this.form.familyIncomeEnd = end
+          break
+        }
+        case 'farmlandMu': {
+          const [start, end] = value || []
+          this.form.farmlandMuStart = start
+          this.form.farmlandMuEnd = end
+          break
+        }
+        default:
+          this.form[prop] = value
+          break
+      }
     },
     onSubmit() {
       this.$emit('change', cloneDeep(this.form))
