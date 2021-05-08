@@ -27,8 +27,7 @@ const Columns = [
     label: '身份证号',
     prop: 'idCardNo',
     isDefaultShow: true,
-    addtype: 'text',
-    required: true
+    addtype: 'text'
   },
 
   {
@@ -37,16 +36,7 @@ const Columns = [
     isDefaultShow: true,
     isFilter: true,
     isMutiple: true,
-    options: [
-      { label: '一组' },
-      { label: '二组' },
-      { label: '三组' },
-      { label: '四组' },
-      { label: '五组' },
-      { label: '六组' },
-      { label: '七组' },
-      { label: '八组' }
-    ],
+    options: [],
     addtype: 'select',
     required: true
   },

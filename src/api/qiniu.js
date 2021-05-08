@@ -12,13 +12,17 @@ import request from '@/utils/request'
  * @param {*} file
  */
 const uploadPicToQiniu = async file => {
-  // const formData = new FormData()
+  const formData = new FormData()
   // 文件对象
-  // formData.append('file', file)
+  formData.append('file', file)
 
   request({
-    url: 'user/upload-image',
+    url: '/upload/file',
     method: 'post',
-    data: { file }
+    data: formData
   })
+}
+
+export default {
+  uploadPicToQiniu
 }

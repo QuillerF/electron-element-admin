@@ -26,7 +26,13 @@
           :prop="item.prop"
           :label="item.label"
         >
-          <UploadImages :item="item" :limit="1" :value="formatValue(item.prop)" @change="handleChange"></UploadImages>
+          <UploadImages
+            :item="item"
+            :limit="1"
+            :image-list="formatImages(item.prop)"
+            show-file-list
+            @uploadImage="handleChangeImg"
+          ></UploadImages>
         </el-form-item>
       </div>
       <h3>家庭信息</h3>
@@ -37,8 +43,8 @@
       <el-form-item v-for="item in otherColumns" :key="item.prop" :prop="item.prop" :label="item.label">
         <AddLogItem :item="item" :value="formatValue(item.prop)" @change="handleChange"></AddLogItem>
       </el-form-item>
-      <h3>家庭成员列表</h3>
-      <el-table :data="list" align="center" border style="width: 100%">
+      <h3 v-if="viewType !== 'add'">家庭成员列表</h3>
+      <el-table v-if="viewType !== 'add'" :data="list" align="center" border style="width: 100%">
         <el-table-column prop="prop" align="center" label="姓名"> </el-table-column>
         <el-table-column prop="prop" align="center" label="户号"> </el-table-column>
         <el-table-column prop="prop" align="center" label="村组"> </el-table-column>
@@ -95,7 +101,8 @@ export default {
       addlogItems,
       list: [],
       form: {},
-      rules: {}
+      rules: {},
+      groups: []
     }
   },
   computed: {
@@ -145,21 +152,34 @@ export default {
   watch: {},
   created() {
     this.getGroup()
+    this.formatRules()
   },
   methods: {
     async getGroup() {
-      const res = Admin.ADMIN_GROUPS()
+      if (this.$store.state.user.token === 'group') {
+        this.formatGroup()
+        return
+      }
+      const res = await Admin.ADMIN_GROUPS()
       this.groups = res
-      this.formatRules()
+      this.formatGroup()
     },
     formatValue(prop) {
       return this.detail ? this.detail[prop] : ''
+    },
+    formatImages(prop) {
+      return this.detail ? [{ url: this.detail[prop] }] : []
     },
     toDetail(row, type = 'readonly') {
       this.$router.push({ path: '/excel/addlog', params: { row, type } })
     },
 
     handleChange(vals = []) {
+      const [prop, val] = vals
+      console.log(prop, val)
+      this.$set(this.form, prop, val)
+    },
+    handleChangeImg(vals = []) {
       const [prop, val] = vals
       console.log(prop, val)
       this.$set(this.form, prop, val)
@@ -198,16 +218,25 @@ export default {
           rules.push(...item.rules)
         }
         obj[item.prop] = rules
-        if (item.prop === 'groupName') {
-          item.options = [
-            {
-              label: this.$store.state.user.userInfo.groupName,
-              value: this.$store.state.user.userInfo.groupId
-            }
-          ]
-        }
       })
       this.rules = obj
+    },
+    formatGroup() {
+      const index = this.columns.findIndex(item => item.prop === 'groupName')
+      if (index < 0) return
+      if (this.$store.state.user.token === 'group') {
+        this.columns[index].options = [
+          {
+            label: this.$store.state.user.userInfo.groupName,
+            value: this.$store.state.user.userInfo.groupId
+          }
+        ]
+      } else {
+        this.columns[index].options = this.groups.map(item => ({
+          label: item.groupName,
+          value: item.groupId
+        }))
+      }
     }
   }
 }

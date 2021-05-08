@@ -121,56 +121,56 @@ export function VILLAGER_MANAGER_DETAIL(villagerId) {
  */
 
 export function VILLAGER_MANAGER_LIST(data) {
-  // return request({
-  //   url: 'villager/manager/list',
-  //   method: 'post',
-  //   data
-  // })
-  return Promise.resolve({
-    total: 30,
-    data: [
-      {
-        birthday: '2018-5-2',
-        education: '小学',
-        familyIncome: 2000,
-        farmlandMu: 10,
-        farmlandRemark: 'ad',
-        gender: '男',
-        groupId: '123',
-        groupName: '一组',
-        hhRegistryMaster: '阿道夫',
-        hhRegistryNo: '阿道夫',
-        hhRegistrySelf: 'adsf',
-        hhRelation: '阿道夫',
-        houseHolderName: '阿斯蒂芬',
-        id: '2asdfasfsdf ',
-        idCardBack: 'asdf',
-        idCardFront: 'adfaf',
-        idCardNo: 'adfasfd',
-        insurance: '是',
-        isFiveGuarantee: '是',
-        isLowIncome: '是',
-        isMilitaryFamily: '是',
-        isMoveIn: '是',
-        isOnlyChild: '是',
-        isPoverty: '是',
-        marriage: '阿道夫',
-        military: '阿斯蒂芬',
-        moveInDate: 'adf',
-        moveInReason: 'asdf',
-        moveInRemark: '阿斯蒂芬',
-        name: '阿斯蒂芬',
-        nation: '阿斯蒂芬',
-        phone: '按地方撒',
-        politicalStatus: 'asdf',
-        religion: '阿斯蒂芬',
-        remark: '阿斯蒂芬',
-        residenceAddress: 'asd发送到',
-        residentialAddress: '阿斯蒂芬',
-        wordType: 'asd '
-      }
-    ]
+  return request({
+    url: 'villager/manager/list',
+    method: 'post',
+    data
   })
+  // return Promise.resolve({
+  //   total: 30,
+  //   data: [
+  //     {
+  //       birthday: '2018-5-2',
+  //       education: '小学',
+  //       familyIncome: 2000,
+  //       farmlandMu: 10,
+  //       farmlandRemark: 'ad',
+  //       gender: '男',
+  //       groupId: '123',
+  //       groupName: '一组',
+  //       hhRegistryMaster: '阿道夫',
+  //       hhRegistryNo: '阿道夫',
+  //       hhRegistrySelf: 'adsf',
+  //       hhRelation: '阿道夫',
+  //       houseHolderName: '阿斯蒂芬',
+  //       id: '2asdfasfsdf ',
+  //       idCardBack: 'asdf',
+  //       idCardFront: 'adfaf',
+  //       idCardNo: 'adfasfd',
+  //       insurance: '是',
+  //       isFiveGuarantee: '是',
+  //       isLowIncome: '是',
+  //       isMilitaryFamily: '是',
+  //       isMoveIn: '是',
+  //       isOnlyChild: '是',
+  //       isPoverty: '是',
+  //       marriage: '阿道夫',
+  //       military: '阿斯蒂芬',
+  //       moveInDate: 'adf',
+  //       moveInReason: 'asdf',
+  //       moveInRemark: '阿斯蒂芬',
+  //       name: '阿斯蒂芬',
+  //       nation: '阿斯蒂芬',
+  //       phone: '按地方撒',
+  //       politicalStatus: 'asdf',
+  //       religion: '阿斯蒂芬',
+  //       remark: '阿斯蒂芬',
+  //       residenceAddress: 'asd发送到',
+  //       residentialAddress: '阿斯蒂芬',
+  //       wordType: 'asd '
+  //     }
+  //   ]
+  // })
 }
 
 /**
@@ -225,10 +225,51 @@ export function VILLAGER_MANAGER_UPDATE_ONE(data) {
   })
 }
 
+/**
+ * 获取单个审核的详情
+ * @param {*} approveId 参数
+ */
+export function APPROVE_DETAIL(approveId) {
+  return request({
+    url: 'approve/detail',
+    method: 'get',
+    params: { approveId }
+  })
+}
+/**
+ * 管理员处理审核
+ * @param {*} approveId 参数
+ * @param {*} type 1同意 2拒绝
+ */
+export function APPROVE_HANDLE(data) {
+  return request({
+    url: 'approve/handle',
+    method: 'put',
+    data
+  })
+}
+/**
+ * 获取审核列表，组长只能获取自己提交的审核列表， 管理员可以获取全部的审核列表用于操作
+	"approveStatus": 0,
+	"groupName": [],
+	"page": 0,
+	"size": 0
+ */
+export function APPROVE_LIST(data) {
+  return request({
+    url: 'approve/list',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   VILLAGER_MANAGER_UPDATE_ONE,
   VILLAGER_MANAGER_LIST,
   VILLAGER_MANAGER_DETAIL,
   VILLAGER_MANAGER_ADD_ONE,
-  VILLAGER_MANAGER_ADD_BATCH
+  VILLAGER_MANAGER_ADD_BATCH,
+  APPROVE_LIST,
+  APPROVE_HANDLE,
+  APPROVE_DETAIL
 }

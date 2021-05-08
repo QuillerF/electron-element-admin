@@ -23,6 +23,9 @@ const filterParam = obj => {
 // create an axios instance
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
+  headers: {
+    'Content-Type': 'multipart/form-data'
+  },
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 30000 // request timeout
 })
@@ -89,7 +92,7 @@ service.interceptors.response.use(
         })
         return Promise.reject(new Error(res.msg || 'Error'))
       } else {
-        return res.data || res
+        return res.data
       }
     }
   },

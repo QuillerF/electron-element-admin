@@ -57,9 +57,8 @@
       </el-table-column>
       <el-table-column align="center" fixed="right" label="操作" width="200">
         <template slot-scope="scope">
-          <el-button type="text" size="default" @click="toDetail(scope.row, 'view')">详情</el-button>
-          <el-button type="text" size="default" @click="toDetail(scope.row, 'edit')">修改</el-button>
-          <el-button type="text" size="default" @click="toDelete(scope.row)">删除</el-button>
+          <el-button type="text" size="default" @click="handleApply(scope.row, 1)">同意</el-button>
+          <el-button type="text" size="default" @click="handleApply(scope.row, 2)">拒绝</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -98,26 +97,8 @@ export default {
       bookType: 'xlsx',
       isShowSetColumn: false,
       params: {
-        birthdayEndDate: '',
-        birthdayStartDate: '',
-        education: '',
-        familyIncomeEnd: '',
-        familyIncomeStart: '',
-        farmlandMuEnd: '',
-        farmlandMuStart: '',
-        groupName: '',
-        insurance: '',
-        isFiveGuarantee: '',
-        isLowIncome: '',
-        isMilitaryFamily: '',
-        isOnlyChild: '',
-        isPoverty: '',
-        marriage: '',
-        nation: '',
-        politicalStatus: '',
-        religion: '',
-        orderBy: 'hhRegistryNo',
-        searchName: '',
+        approveStatus: 1,
+        groupName: [],
         page: 1,
         size: 50
       },
@@ -132,6 +113,23 @@ export default {
     this.$refs.table.doLayout()
   },
   methods: {
+    handleApply(row, status) {
+      const txt = status === 1 ? '同意' : '拒绝'
+      this.$confirm(`确定审批${txt}吗?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(async () => {
+          await Excel.APPROVE_HANDLE({ approveId: row.approveId, type: status })
+          this.$message({
+            message: '操作成功',
+            type: 'success'
+          })
+          this.fetchDataDebounce()
+        })
+        .catch(() => {})
+    },
     paramsChange(val = {}) {
       Object.assign(this.params, val)
       console.log(this.params)
@@ -176,7 +174,7 @@ export default {
       try {
         this.listLoading = true
         const params = cloneDeep(this.params)
-        const { data, total } = await Excel.VILLAGER_MANAGER_LIST(params)
+        const { data, total } = await Excel.APPROVE_LIST(params)
         this.list = data
         this.total = total
         this.listLoading = false

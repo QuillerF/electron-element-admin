@@ -23,7 +23,12 @@
     >
       <slot></slot>
       <i v-if="!$slots.default && (showFileList || !uploadImageList.length)" :class="iconClass"></i>
-      <img v-if="!showFileList && uploadImageList.length" :src="uploadImageList[0].url" alt="上传文件" class="avatar" />
+      <img
+        v-if="!showFileList && uploadImageList.length"
+        :src="formaturl(uploadImageList[0].url)"
+        alt="上传文件"
+        class="avatar"
+      />
     </el-upload>
     <el-dialog :visible.sync="dialogVisible" append-to-body>
       <img :src="dialogImageUrl" alt width="100%" />
@@ -112,6 +117,9 @@ export default {
   },
 
   methods: {
+    formaturl(url) {
+      return process.env.VUE_APP_BASE_API + url
+    },
     handlePictureCardPreview({ url }) {
       this.dialogVisible = true
       this.dialogImageUrl = url
@@ -175,16 +183,10 @@ export default {
       }
     },
     async uploadImage({ file }) {
-      console.log('file=====>', file)
-      const filebase64 = await compressImage(file.path)
-      // console.log('filebase64===>', filebase64)
-      // const url = await qiniu.uploadPicToQiniu(filebase64)
-      if (this.showFileList) {
-        // const { uid, name, size } = file
-        this.$emit('change', [this.item.prop, filebase64])
-      } else {
-        this.$emit('change', [this.item.prop, filebase64])
-      }
+      console.log(file)
+      const url = await qiniu.uploadPicToQiniu(file)
+
+      this.$emit('uploadImage', [this.item.prop, url])
     },
     handleExceed() {
       const str = this.tips?.limit || `只能上传${this.limit}张图片`
@@ -192,7 +194,11 @@ export default {
     }
   },
 
-  computed: {}
+  computed: {
+    values() {
+      return [this.value]
+    }
+  }
 }
 </script>
 

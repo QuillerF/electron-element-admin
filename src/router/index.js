@@ -146,6 +146,12 @@ export const asyncRoutes = [
         meta: { title: '群众列表', affix: true }
       },
       {
+        path: 'wait-apply',
+        component: () => import('@/views/excel/wait-apply'),
+        name: '待审批',
+        meta: { title: '待审批' }
+      },
+      {
         path: 'addlog',
         component: () => import('@/views/excel/add-log-page'),
         name: '添加记录',

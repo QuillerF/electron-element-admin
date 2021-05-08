@@ -1,5 +1,11 @@
 import request from '@/utils/request'
-
+import hashjs from 'hash.js'
+const setSha256 = type => {
+  return hashjs
+    .sha256()
+    .update(type.trim())
+    .digest('hex')
+}
 /**
  * 超管添加用户
  * @param {*} groupId 参数
@@ -65,6 +71,8 @@ export function ADMIN_ROLES() {
  */
 
 export function USER_UPDATE_PWD(data) {
+  data.newPassword = setSha256(data.newPassword)
+  data.oldPassword = setSha256(data.oldPassword)
   return request({
     url: 'user/update-pwd',
     method: 'put',

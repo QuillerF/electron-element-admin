@@ -71,10 +71,23 @@ export default {
       this.$emit('change', [this.item.prop, val])
     }
   },
-  created() {},
+  created() {
+    this.formatSelect()
+  },
   methods: {
     valueChange(val) {
       this.$emit('change', [this.item.prop, val])
+    },
+    formatSelect() {
+      this.select = ''
+      if (this.item.options) {
+        if (this.item.options[0]?.label === '是') {
+          this.select = '否'
+        } else {
+          this.select = this.item.options[0]?.value || this.item.options[0]?.label
+        }
+      }
+      this.valueChange(this.select)
     }
   }
 }
