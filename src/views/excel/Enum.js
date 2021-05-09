@@ -215,7 +215,7 @@ const Columns = [
     prop: 'familyIncome',
     isFilter: true,
     type: 'numrange',
-    addtype: 'text',
+    addtype: 'num',
     required: true
   },
   {
@@ -223,18 +223,15 @@ const Columns = [
     prop: 'farmlandMu',
     isFilter: true,
     type: 'numrange',
-    addtype: 'text',
+    addtype: 'num',
     required: true
   },
-  // {
-  //   label: '耕地备注',
-  //   prop: 'farmlandRemark',
-  //   isFilter: true,
-  //   type: 'numrange',
-  //   addtype: 'textarea',
-  //   placeholder: '至多200字'
-  // },
-
+  {
+    label: '耕地备注',
+    prop: 'farmlandRemark',
+    addtype: 'textarea',
+    placeholder: '至多200字'
+  },
   {
     label: '是否迁入',
     prop: 'isMoveIn',

@@ -1,16 +1,18 @@
 <!-- 信息录入 -->
 <template>
   <div class="addlog">
+    <div v-if="viewType === 'view'" class="mask"></div>
     <!-- <div v-if="viewType === 'view'" class="flex-ar mb20"> -->
-    <el-form
-      ref="form"
-      :model="form"
-      :rules="rules"
-      :disabled="viewType === 'view'"
-      label-width="200px"
-      :inline="true"
-      size="mini"
-    >
+    <el-form ref="form" :model="form" :rules="rules" label-width="200px" :inline="true" size="mini">
+      <div v-if="isApply">
+        <h3>审核情况</h3>
+        <el-form-item label="审核状态:">
+          <span>{{ getApproveStatus }}</span>
+        </el-form-item>
+        <el-form-item label="操作类型:">
+          <span>{{ detail.operationType }}</span>
+        </el-form-item>
+      </div>
       <h3>个人信息</h3>
       <el-form-item v-for="item in personalColumns" :key="item.prop" :prop="item.prop" :label="item.label">
         <AddLogItem :item="item" :value="formatValue(item.prop)" @change="handleChange"></AddLogItem>
@@ -29,8 +31,7 @@
           <UploadImages
             :item="item"
             :limit="1"
-            :image-list="formatImages(item.prop)"
-            show-file-list
+            :src="formatImages(item.prop)"
             @uploadImage="handleChangeImg"
           ></UploadImages>
         </el-form-item>
@@ -43,18 +44,25 @@
       <el-form-item v-for="item in otherColumns" :key="item.prop" :prop="item.prop" :label="item.label">
         <AddLogItem :item="item" :value="formatValue(item.prop)" @change="handleChange"></AddLogItem>
       </el-form-item>
-      <h3 v-if="viewType !== 'add'">家庭成员列表</h3>
-      <el-table v-if="viewType !== 'add'" :data="list" align="center" border style="width: 100%">
-        <el-table-column prop="prop" align="center" label="姓名"> </el-table-column>
-        <el-table-column prop="prop" align="center" label="户号"> </el-table-column>
-        <el-table-column prop="prop" align="center" label="村组"> </el-table-column>
-        <el-table-column prop="prop" align="center" label="身份证号"> </el-table-column>
-        <el-table-column prop="prop" align="center" label="联系方式"> </el-table-column>
-        <el-table-column prop="prop" align="center" label="户主"> </el-table-column>
-        <el-table-column prop="prop" align="center" label="与户主关系"> </el-table-column>
+      <h3 v-if="viewType !== 'add' && !isApply">家庭成员列表</h3>
+      <el-table
+        v-if="viewType !== 'add' && !isApply"
+        :data="otherFamily"
+        class="table"
+        align="center"
+        border
+        style="width: 100%"
+      >
+        <el-table-column prop="name" align="center" label="姓名"> </el-table-column>
+        <el-table-column prop="hhRegistryNo" align="center" label="户号"> </el-table-column>
+        <el-table-column prop="groupName" align="center" label="村组"> </el-table-column>
+        <el-table-column prop="idCardNo" align="center" label="身份证号"> </el-table-column>
+        <el-table-column prop="phone" align="center" label="联系方式"> </el-table-column>
+        <el-table-column prop="hhRegistryMaster" align="center" label="户主"> </el-table-column>
+        <el-table-column prop="hhRelation" align="center" label="与户主关系"> </el-table-column>
         <el-table-column prop="prop" align="center" label="操作" width="200">
           <template slot-scope="scope">
-            <el-button type="text" size="default" @click="toDetail(scope.row)">详情</el-button>
+            <el-button type="text" size="default" @click="toDetail(scope.row, 'view')">详情</el-button>
             <el-button type="text" size="default" @click="toDetail(scope.row, 'edit')">修改</el-button>
             <el-button type="text" size="default" @click="toDelete(scope.row)">删除</el-button>
           </template>
@@ -90,9 +98,17 @@ export default {
       type: String,
       default: 'add'
     },
+    isApply: {
+      type: Boolean,
+      default: false
+    },
     detail: {
       type: Object,
       default: () => {}
+    },
+    otherFamily: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
@@ -140,20 +156,38 @@ export default {
         'isLowIncome',
         'isFiveGuarantee',
         'isMilitaryFamily',
-        'farmlandMu'
+        'farmlandMu',
+        'farmlandRemark'
       ]
       return this.columns.filter(item => keys.includes(item.prop))
     },
     otherColumns() {
       const keys = this.form.isMoveIn === '是' ? ['isMoveIn', 'moveInReason', 'remark'] : ['isMoveIn', 'remark']
       return this.columns.filter(item => keys.includes(item.prop))
+    },
+    getApproveStatus() {
+      const role = this.$store.state.user.token
+      const status = this.detail.approveStatus
+      if (status === 3) return '已驳回'
+      if (status === 1) {
+        return role === 'group' ? '审核中' : '待审核'
+      }
+      return '已通过'
     }
   },
-  watch: {},
-  created() {
-    this.getGroup()
+  watch: {
+    detail: {
+      handler(val) {
+        Object.assign(this.form, val)
+      },
+      immediate: true
+    }
+  },
+  async created() {
+    await this.getGroup()
     this.formatRules()
   },
+
   methods: {
     async getGroup() {
       if (this.$store.state.user.token === 'group') {
@@ -165,13 +199,40 @@ export default {
       this.formatGroup()
     },
     formatValue(prop) {
-      return this.detail ? this.detail[prop] : ''
+      return this.form ? this.form[prop] : ''
     },
     formatImages(prop) {
-      return this.detail ? [{ url: this.detail[prop] }] : []
+      return this.form ? this.form[prop] : ''
     },
-    toDetail(row, type = 'readonly') {
-      this.$router.push({ path: '/excel/addlog', params: { row, type } })
+    // toDetail(row, type = 'readonly') {
+    //   this.$router.push({ path: '/excel/addlog', params: { row, type } })
+    // },
+    toDelete(row) {
+      this.$confirm('确认删除该条信息吗?', '提示', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(async () => {
+          await Excel.VILLAGER_MANAGER_DELETE(row.id)
+          this.$message({
+            message: '删除成功',
+            type: 'success'
+          })
+          this.fetchDataDebounce()
+        })
+        .catch(() => {})
+    },
+    toDetail(row, type = 'view') {
+      if (type === 'add') {
+        this.$router.push({ path: '/excel/addlog', query: { id: row.id, viewType: type } })
+        return
+      }
+      if (type === 'edit') {
+        this.$router.push({ path: '/excel/editlog', query: { id: row.id, viewType: type } })
+        return
+      }
+      this.$router.push({ path: '/excel/viewlog', query: { id: row.id, viewType: type } })
     },
 
     handleChange(vals = []) {
@@ -220,6 +281,9 @@ export default {
         obj[item.prop] = rules
       })
       this.rules = obj
+      this.$nextTick(() => {
+        this.$refs.form.clearValidate()
+      })
     },
     formatGroup() {
       const index = this.columns.findIndex(item => item.prop === 'groupName')
@@ -244,7 +308,20 @@ export default {
 
 <style lang="scss" scoped>
 .addlog {
+  position: relative;
   padding: 20px;
+  .mask {
+    z-index: 1000;
+    cursor: not-allowed;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+  .table {
+    z-index: 1001;
+  }
 }
 h3 {
   padding-left: 200px;

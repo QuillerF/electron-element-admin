@@ -22,13 +22,8 @@
       class="upload"
     >
       <slot></slot>
-      <i v-if="!$slots.default && (showFileList || !uploadImageList.length)" :class="iconClass"></i>
-      <img
-        v-if="!showFileList && uploadImageList.length"
-        :src="formaturl(uploadImageList[0].url)"
-        alt="上传文件"
-        class="avatar"
-      />
+      <i v-if="!src" :class="iconClass"></i>
+      <img v-if="src" :src="formaturl(src)" alt="上传文件" class="avatar" />
     </el-upload>
     <el-dialog :visible.sync="dialogVisible" append-to-body>
       <img :src="dialogImageUrl" alt width="100%" />
@@ -48,6 +43,10 @@ export default {
     item: {
       type: Object,
       default: () => {}
+    },
+    src: {
+      type: String,
+      default: ''
     },
     acceptType: {
       type: Number,
@@ -118,25 +117,14 @@ export default {
 
   methods: {
     formaturl(url) {
-      return process.env.VUE_APP_BASE_API + url
+      return process.env.VUE_APP_BASE_API + url.slice(3)
     },
     handlePictureCardPreview({ url }) {
       this.dialogVisible = true
-      this.dialogImageUrl = url
+      this.dialogImageUrl = this.src
     },
     async handleRemove(opt, fileList) {
-      const { url, status } = opt
-      // console.log(opt,status)
-      if (!url || status === 'ready') {
-        return
-      }
-      try {
-        // await uploadFile.deleteImg(url)
-        this.$emit('uploadImage', fileList)
-        this.deleteImgUrl.push(url)
-      } catch (error) {
-        this.$emit('uploadImage', cloneDeep(this.uploadImageList))
-      }
+      this.$emit('uploadImage', [this.item.prop, ''])
     },
     beforeUpload(file) {
       console.log(file)
@@ -185,7 +173,7 @@ export default {
     async uploadImage({ file }) {
       console.log(file)
       const url = await qiniu.uploadPicToQiniu(file)
-
+      console.log('url', url)
       this.$emit('uploadImage', [this.item.prop, url])
     },
     handleExceed() {

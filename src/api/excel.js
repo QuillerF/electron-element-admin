@@ -92,6 +92,21 @@ export function VILLAGER_MANAGER_DETAIL(villagerId) {
     }
   })
 }
+/**
+ * 删除一个居民
+ *
+ * @param {*} villagerId 参数
+ */
+
+export function VILLAGER_MANAGER_DELETE(villagerId) {
+  return request({
+    url: 'villager/manager/delete',
+    method: 'delete',
+    params: {
+      villagerId
+    }
+  })
+}
 
 /**
  * 获取居民列表
@@ -241,11 +256,22 @@ export function APPROVE_DETAIL(approveId) {
  * @param {*} approveId 参数
  * @param {*} type 1同意 2拒绝
  */
-export function APPROVE_HANDLE(data) {
+export function APPROVE_HANDLE(params) {
   return request({
     url: 'approve/handle',
     method: 'put',
-    data
+    params
+  })
+}
+/**
+ * 撤回
+ * @param {*} approveId 参数
+ */
+export function APPROVE_CANCEL(approveId) {
+  return request({
+    url: 'approve/cancel',
+    method: 'put',
+    params: { approveId }
   })
 }
 /**
@@ -263,13 +289,28 @@ export function APPROVE_LIST(data) {
   })
 }
 
+/**
+ * 组长删除被驳回的信息
+	"approveId": 0,
+ */
+export function APPROVE_DELETE(approveId) {
+  return request({
+    url: 'approve/delete',
+    method: 'delete',
+    params: { approveId }
+  })
+}
+
 export default {
   VILLAGER_MANAGER_UPDATE_ONE,
   VILLAGER_MANAGER_LIST,
   VILLAGER_MANAGER_DETAIL,
   VILLAGER_MANAGER_ADD_ONE,
   VILLAGER_MANAGER_ADD_BATCH,
+  VILLAGER_MANAGER_DELETE,
   APPROVE_LIST,
   APPROVE_HANDLE,
-  APPROVE_DETAIL
+  APPROVE_DETAIL,
+  APPROVE_CANCEL,
+  APPROVE_DELETE
 }

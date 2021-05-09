@@ -16,7 +16,7 @@ const uploadPicToQiniu = async file => {
   // 文件对象
   formData.append('file', file)
 
-  request({
+  return request({
     url: '/upload/file',
     method: 'post',
     data: formData

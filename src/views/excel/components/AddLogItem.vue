@@ -22,12 +22,26 @@
       v-model="textarea"
       :placeholder="item.placeholder"
       :rows="3"
+      maxlength="200"
+      show-word-limit
       type="textarea"
       resize="none"
       style="width:200px"
       clearable
       @blur="valueChange(textarea)"
     ></el-input>
+    <el-input-number
+      v-else-if="item.addtype === 'num'"
+      v-model="text"
+      :precision="0"
+      :controls="false"
+      :min="0"
+      :max="9999999999"
+      clearable
+      style="width:200px"
+      @change="valueChange(text)"
+    ></el-input-number>
+
     <el-select v-else v-model="select" style="width:200px" clearable @change="valueChange(select)">
       <el-option
         v-for="(op, index) in item.options"
@@ -49,7 +63,7 @@ export default {
       default: () => {}
     },
     value: {
-      type: [String, Array, Object, Number],
+      type: [String, Array, Object, Number, Date],
       default: ''
     }
   },

@@ -1,29 +1,6 @@
 <template>
   <div class="app-container">
     <div class="flex-ar mb20">
-      <el-select v-model="params.orderBy" placeholder="" class="mr20" style="width:250px">
-        <el-option label="户号排序" value="hhRegistryNo"> </el-option>
-        <el-option label="最近修改" value="updatedAt"> </el-option>
-      </el-select>
-      <el-input
-        v-model="params.searchName"
-        prefix-icon="el-icon-search"
-        class="mr20"
-        placeholder="姓名、联系方式、户号"
-        style="width:300px"
-        clearable
-      ></el-input>
-      <el-button type="primary" icon="el-icon-search" class="mr20" @click="fetchData">搜索</el-button>
-      <el-popover placement="bottom" title="筛选项" width="700" trigger="click">
-        <FilterBox @change="paramsChange"></FilterBox>
-        <el-button slot="reference" type="text" class="mr20" style="font-size:20px;color:#1684FC" @click="showFilterBox"
-          ><svg-icon icon-class="filter"
-        /></el-button>
-      </el-popover>
-      <el-button :loading="downloadLoading" class="mr20" type="text" @click="handleDownload">
-        导出表格
-      </el-button>
-      <el-button type="text" class="mr20" @click="toAddLogs">添加记录</el-button>
       <el-popover placement="bottom" title="配置显示列" width="500" trigger="click">
         <SetShowColumn :real-columns="columns" @change="columnsChange"></SetShowColumn>
         <el-button slot="reference" type="text">配置显示列</el-button>
@@ -55,10 +32,34 @@
         align="center"
       >
       </el-table-column>
+      <el-table-column prop="operationType" fixed="right" label="数据类型" align="center"> </el-table-column>
       <el-table-column align="center" fixed="right" label="操作" width="200">
         <template slot-scope="scope">
-          <el-button type="text" size="default" @click="handleApply(scope.row, 1)">同意</el-button>
-          <el-button type="text" size="default" @click="handleApply(scope.row, 2)">拒绝</el-button>
+          <el-button type="text" size="default" @click="toDetail(scope.row)">详情</el-button>
+          <el-button
+            v-if="type === 'waitapply'"
+            type="text"
+            size="default"
+            style="color:#67C23A"
+            @click="handleApply(scope.row, 1)"
+            >通过</el-button
+          >
+          <el-button
+            v-if="type === 'waitapply'"
+            type="text"
+            size="default"
+            style="color:#F56C6C"
+            @click="handleApply(scope.row, 2)"
+            >驳回</el-button
+          >
+          <el-button
+            v-if="type === 'waiting'"
+            type="text"
+            style="color:#E6A23C"
+            size="default"
+            @click="toReturn(scope.row)"
+            >撤回</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -84,7 +85,7 @@ import { export_json_to_excel } from '@/vendor/Export2Excel'
 
 export default {
   name: 'ExportExcel',
-  components: { Pagination, SetShowColumn, FilterBox },
+  components: { Pagination, SetShowColumn },
   data() {
     return {
       columns: Columns.filter(item => item.isDefaultShow),
@@ -105,6 +106,12 @@ export default {
       fetchDataDebounce: debounce(this.fetchData, 300)
     }
   },
+  props: {
+    type: {
+      type: String, // waitapply,waiting,back
+      default: 'back'
+    }
+  },
   created() {
     this.fetchDataDebounce()
   },
@@ -113,15 +120,31 @@ export default {
     this.$refs.table.doLayout()
   },
   methods: {
+    toReturn(row) {
+      this.$confirm('确认撤回吗?', '提示', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(async () => {
+          await Excel.APPROVE_CANCEL(row.id)
+          this.$message({
+            message: '操作成功!',
+            type: 'success'
+          })
+          this.closeSelectedTag()
+        })
+        .catch(() => {})
+    },
     handleApply(row, status) {
-      const txt = status === 1 ? '同意' : '拒绝'
-      this.$confirm(`确定审批${txt}吗?`, '提示', {
+      const txt = status === 1 ? '通过审核' : '驳回'
+      this.$confirm(`确定${txt}吗?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
         .then(async () => {
-          await Excel.APPROVE_HANDLE({ approveId: row.approveId, type: status })
+          await Excel.APPROVE_HANDLE({ approveId: row.id, type: status })
           this.$message({
             message: '操作成功',
             type: 'success'
@@ -136,24 +159,23 @@ export default {
       this.fetchDataDebounce()
     },
     toDelete() {
-      this.$confirm('确认删除该条信息吗?', '提示', {
+      this.$confirm('确认删除此信息吗?', '提示', {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning'
       })
-        .then(() => {})
+        .then(async () => {
+          await Excel.APPROVE_DELETE(this.detail.id)
+          this.$message({
+            message: '操作成功!',
+            type: 'success'
+          })
+          this.closeSelectedTag()
+        })
         .catch(() => {})
     },
     toDetail(row, type = 'view') {
-      if (type === 'add') {
-        this.$router.push({ path: '/excel/addlog', query: { id: row.id, viewType: type } })
-        return
-      }
-      if (type === 'edit') {
-        this.$router.push({ path: '/excel/editlog', query: { id: row.id, viewType: type } })
-        return
-      }
-      this.$router.push({ path: '/excel/viewlog', query: { id: row.id, viewType: type } })
+      this.$router.push({ path: '/apply/viewapply', query: { id: row.id, viewType: type } })
     },
     columnsChange(val) {
       this.columns = val
@@ -174,6 +196,7 @@ export default {
       try {
         this.listLoading = true
         const params = cloneDeep(this.params)
+        params.approveStatus = this.type === 'back' ? 3 : 1
         const { data, total } = await Excel.APPROVE_LIST(params)
         this.list = data
         this.total = total

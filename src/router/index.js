@@ -146,49 +146,76 @@ export const asyncRoutes = [
         meta: { title: '群众列表', affix: true }
       },
       {
-        path: 'wait-apply',
-        component: () => import('@/views/excel/wait-apply'),
-        name: '待审批',
-        meta: { title: '待审批' }
-      },
-      {
         path: 'addlog',
         component: () => import('@/views/excel/add-log-page'),
-        name: '添加记录',
-        hidden: true,
-        meta: { title: '添加记录' }
+        name: '新建居民信息',
+        meta: { title: '新建居民信息' }
       },
       {
         path: 'editlog',
         component: () => import('@/views/excel/edit-log-page'),
-        name: '修改记录',
+        name: '修改居民信息',
         hidden: true,
-        meta: { title: '修改记录' }
+        meta: { title: '修改居民信息' }
       },
       {
         path: 'viewlog',
         component: () => import('@/views/excel/view-log-page'),
-        name: '查看记录',
+        name: '查看居民信息',
         hidden: true,
-        meta: { title: '查看记录' }
-      },
-      {
-        path: 'export-selected-excel',
-        component: () => import('@/views/excel/select-excel'),
-        name: 'SelectExcel',
-        meta: { title: '变动记录' }
-      },
+        meta: { title: '查看居民信息' }
+      }
       // {
-      //   path: 'export-merge-header',
-      //   component: () => import('@/views/excel/merge-header'),
-      //   name: 'MergeHeader',
-      //   meta: { title: '备用' }
+      //   path: 'export-selected-excel',
+      //   component: () => import('@/views/excel/select-excel'),
+      //   name: 'SelectExcel',
+      //   meta: { title: '变动记录' }
       // },
+      // {
+      //   path: 'upload-excel',
+      //   component: () => import('@/views/excel/upload-excel'),
+      //   name: 'UploadExcel',
+      //   meta: { title: '批量导入' }
+      // }
+    ]
+  },
+  {
+    path: '/apply',
+    component: Layout,
+    redirect: '/apply/wait-apply',
+    name: 'apply',
+    meta: {
+      title: '审核管理',
+      icon: 'el-icon-s-claim'
+    },
+    children: [
       {
-        path: 'upload-excel',
-        component: () => import('@/views/excel/upload-excel'),
-        name: 'UploadExcel',
-        meta: { title: '批量导入' }
+        path: 'wait-apply',
+        component: () => import('@/views/excel/wait-apply'),
+        name: '待审核',
+        props: { type: 'waitapply' },
+        meta: { title: '待审核', roles: ['super-admin', 'admin'] }
+      },
+      {
+        path: 'wait-ing',
+        component: () => import('@/views/excel/wait-apply'),
+        name: '审核中',
+        props: { type: 'waiting' },
+        meta: { title: '审核中', roles: ['group'] }
+      },
+      {
+        path: 'apply-back',
+        component: () => import('@/views/excel/wait-apply'),
+        name: '被驳回',
+        props: { type: 'back' },
+        meta: { title: '被驳回', roles: ['group'] }
+      },
+      {
+        path: 'viewapply',
+        component: () => import('@/views/excel/view-apply-page'),
+        name: '查看审核',
+        hidden: true,
+        meta: { title: '查看审核' }
       }
     ]
   },
@@ -199,7 +226,7 @@ export const asyncRoutes = [
     alwaysShow: true, // will always show the root menu
     name: 'Permission',
     meta: {
-      title: '成员管理',
+      title: '办公人员管理',
       icon: 'el-icon-s-custom'
     },
     children: [
@@ -216,9 +243,9 @@ export const asyncRoutes = [
       {
         path: 'role',
         component: () => import('@/views/permission/role'),
-        name: '成员列表',
+        name: '管理人员列表',
         meta: {
-          title: '成员列表',
+          title: '管理人员列表',
           roles: ['super-admin']
         }
       },
@@ -233,55 +260,6 @@ export const asyncRoutes = [
       }
     ]
   },
-
-  // {
-  //   path: '/zip',
-  //   component: Layout,
-  //   redirect: '/zip/download',
-  //   alwaysShow: true,
-  //   name: 'Zip',
-  //   meta: { title: '压缩', icon: 'zip' },
-  //   children: [
-  //     {
-  //       path: 'download',
-  //       component: () => import('@/views/zip/index'),
-  //       name: 'ExportZip',
-  //       meta: { title: 'Export Zip' }
-  //     }
-  //   ]
-  // },
-
-  // {
-  //   path: '/pdf',
-  //   component: Layout,
-  //   redirect: '/pdf/index',
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       component: () => import('@/views/pdf/index'),
-  //       name: 'PDF',
-  //       meta: { title: 'PDF', icon: 'pdf' }
-  //     }
-  //   ]
-  // },
-  // {
-  //   path: '/pdf/download',
-  //   component: () => import('@/views/pdf/download'),
-  //   hidden: true
-  // },
-
-  // {
-  //   path: '/theme',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       component: () => import('@/views/theme/index'),
-  //       name: 'Theme',
-  //       meta: { title: '主题', icon: 'theme' }
-  //     }
-  //   ]
-  // },
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }

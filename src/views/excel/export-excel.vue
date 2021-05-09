@@ -23,7 +23,7 @@
       <el-button :loading="downloadLoading" class="mr20" type="text" @click="handleDownload">
         导出表格
       </el-button>
-      <el-button type="text" class="mr20" @click="toAddLogs">添加记录</el-button>
+      <el-button type="text" class="mr20" @click="toAddLogs">新建居民信息</el-button>
       <el-popover placement="bottom" title="配置显示列" width="500" trigger="click">
         <SetShowColumn :real-columns="columns" @change="columnsChange"></SetShowColumn>
         <el-button slot="reference" type="text">配置显示列</el-button>
@@ -137,13 +137,20 @@ export default {
       console.log(this.params)
       this.fetchDataDebounce()
     },
-    toDelete() {
+    toDelete(row) {
       this.$confirm('确认删除该条信息吗?', '提示', {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning'
       })
-        .then(() => {})
+        .then(async () => {
+          await Excel.VILLAGER_MANAGER_DELETE(row.id)
+          this.$message({
+            message: '删除成功',
+            type: 'success'
+          })
+          this.fetchDataDebounce()
+        })
         .catch(() => {})
     },
     toDetail(row, type = 'view') {

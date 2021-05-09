@@ -29,8 +29,8 @@ export default {
   },
   methods: {
     async getData(id) {
-      const res = await Excel.VILLAGER_MANAGER_DETAIL(id)
-      this.detail = res
+      const { source } = await Excel.VILLAGER_MANAGER_DETAIL(id)
+      this.detail = source
     },
     toEdit() {
       this.$router.push('/excel/edit-log-page')
