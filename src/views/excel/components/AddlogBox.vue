@@ -32,6 +32,7 @@
             :item="item"
             :limit="1"
             :src="formatImages(item.prop)"
+            :view-type="viewType"
             @uploadImage="handleChangeImg"
           ></UploadImages>
         </el-form-item>
@@ -44,9 +45,9 @@
       <el-form-item v-for="item in otherColumns" :key="item.prop" :prop="item.prop" :label="item.label">
         <AddLogItem :item="item" :value="formatValue(item.prop)" @change="handleChange"></AddLogItem>
       </el-form-item>
-      <h3 v-if="viewType !== 'add' && !isApply">家庭成员列表</h3>
+      <h3 v-if="viewType === 'view' && !isApply">家庭成员列表</h3>
       <el-table
-        v-if="viewType !== 'add' && !isApply"
+        v-if="viewType === 'view' && !isApply"
         :data="otherFamily"
         class="table"
         align="center"
@@ -162,7 +163,8 @@ export default {
       return this.columns.filter(item => keys.includes(item.prop))
     },
     otherColumns() {
-      const keys = this.form.isMoveIn === '是' ? ['isMoveIn', 'moveInReason', 'remark'] : ['isMoveIn', 'remark']
+      // const keys = this.form.isMoveIn === '是' ? ['isMoveIn', 'moveInReason', 'remark'] : ['isMoveIn', 'remark']
+      const keys = 'remark'
       return this.columns.filter(item => keys.includes(item.prop))
     },
     getApproveStatus() {

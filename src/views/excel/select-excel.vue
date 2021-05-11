@@ -5,6 +5,18 @@
         <el-option label="时间倒序" value="时间倒序"> </el-option>
         <el-option label="时间正序" value="时间正序"> </el-option>
       </el-select>
+      <el-select v-model="params.type" placeholder="变动类型" class="mr20" style="width:250px" clearable>
+        <el-option value="迁入"> </el-option>
+        <el-option value="迁出"> </el-option>
+        <el-option value="注销"> </el-option>
+      </el-select>
+      <el-date-picker
+        v-model="daterange"
+        type="daterange"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+        class="mr20"
+      ></el-date-picker>
       <el-input
         v-model="params.name"
         prefix-icon="el-icon-search"
@@ -14,9 +26,6 @@
         clearable
       ></el-input>
       <el-button type="primary" icon="el-icon-search" class="mr20" @click="fetchData">搜索</el-button>
-      <el-button type="text" class="mr20" style="font-size:20px;color:#1684FC" @click="showFilterBox"
-        ><svg-icon icon-class="filter"
-      /></el-button>
     </div>
     <el-table
       ref="table"
@@ -29,7 +38,7 @@
       fit
       highlight-current-row
     >
-      <el-table-column align="center" fixed label="Id" width="95">
+      <el-table-column align="center" fixed label="序号" width="95">
         <template slot-scope="scope">
           {{ scope.$index }}
         </template>
@@ -45,7 +54,6 @@
       </el-table-column>
       <el-table-column align="center" fixed="right" label="操作" width="200">
         <template slot-scope="scope">
-          <el-button type="text" size="default" @click="toDetail(scope.row, 'edit')">修改</el-button>
           <el-button type="text" size="default" @click="toDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
@@ -80,10 +88,12 @@ export default {
       autoWidth: true,
       bookType: 'xlsx',
       isShowSetColumn: false,
+      daterange: [],
       params: {
         page: 1,
         limit: 50,
         sort: '时间倒序',
+        type: '',
         name: ''
       }
     }

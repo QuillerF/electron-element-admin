@@ -232,18 +232,19 @@ const Columns = [
     addtype: 'textarea',
     placeholder: '至多200字'
   },
-  {
-    label: '是否迁入',
-    prop: 'isMoveIn',
-    addtype: 'select',
-    options: [{ label: '是' }, { label: '否' }]
-  },
-  {
-    label: '迁入原因',
-    prop: 'moveInReason',
-    addtype: 'select',
-    options: [{ label: '嫁娶' }, { label: '收留' }]
-  },
+  // {
+  //   label: '是否迁入',
+  //   prop: 'isMoveIn',
+  //   addtype: 'select',
+  //   options: [{ label: '是' }, { label: '否' }]
+  // },
+  // {
+  //   label: '迁入原因',
+  //   prop: 'moveInReason',
+  //   addtype: 'select',
+  //   required: true,
+  //   options: [{ label: '嫁娶' }, { label: '收留' }]
+  // },
   // {
   //   label: '迁入备注',
   //   prop: 'moveInRemark',
@@ -257,9 +258,13 @@ const Columns = [
 ]
 
 const ChangeLogsColumns = [
+  // {
+  //   label: '姓名',
+  //   prop: 'name'
+  // },
   {
-    label: '姓名',
-    prop: 'name'
+    label: '身份证号',
+    prop: 'idCardNo'
   },
   {
     label: '变动类型',

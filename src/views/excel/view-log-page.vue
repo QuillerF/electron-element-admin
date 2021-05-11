@@ -3,8 +3,8 @@
   <div>
     <div class="flex-ar mb20 mt20">
       <el-button type="primary" size="mini" class="mr20" @click="toEdit">修改</el-button>
-      <!-- <el-button type="primary" size="mini" class="mr20" @click="toOut">迁出</el-button>
-      <el-button type="warning" size="mini" class="mr20" @click="toCancel">注销</el-button> -->
+      <el-button type="primary" size="mini" class="mr20" @click="toOut">迁出</el-button>
+      <el-button type="warning" size="mini" class="mr20" @click="toCancel">注销</el-button>
       <el-button type="danger" size="mini" class="mr20" @click="toDelete(detail)">删除</el-button>
     </div>
     <AddlogBox :detail="detail" :other-family="otherFamily" :view-type="viewType"></AddlogBox>

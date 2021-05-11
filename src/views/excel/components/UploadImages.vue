@@ -23,7 +23,19 @@
     >
       <slot></slot>
       <i v-if="!src" :class="iconClass"></i>
-      <img v-if="src" :src="formaturl(src)" alt="上传文件" class="avatar" />
+      <hover @click="handlePictureCardPreview">
+        <img v-if="src" :src="formaturl(src)" alt="上传文件" class="avatar" />
+        <!-- action插槽 -->
+        <template #action>
+          <i class="el-icon-zoom-in " style="color:#fff" @click.stop="handlePictureCardPreview"></i>
+          <i
+            v-if="viewType === 'add' || viewType === 'edit'"
+            class="el-icon-delete ml20"
+            style="color:#fff"
+            @click.stop="handleRemove"
+          ></i>
+        </template>
+      </hover>
     </el-upload>
     <el-dialog :visible.sync="dialogVisible" append-to-body>
       <img :src="dialogImageUrl" alt width="100%" />
@@ -34,11 +46,12 @@
 <script>
 import { cloneDeep, isEmpty } from 'lodash'
 import qiniu from '@/api/qiniu'
+import hover from './hover'
 import { compressImage } from '@/utils/imgupload'
 
 export default {
   name: 'UploadImage',
-  components: {},
+  components: { hover },
   props: {
     item: {
       type: Object,
@@ -47,6 +60,10 @@ export default {
     src: {
       type: String,
       default: ''
+    },
+    viewType: {
+      type: String,
+      default: 'add'
     },
     acceptType: {
       type: Number,
@@ -119,9 +136,9 @@ export default {
     formaturl(url) {
       return process.env.VUE_APP_BASE_API + url.slice(3)
     },
-    handlePictureCardPreview({ url }) {
+    handlePictureCardPreview() {
       this.dialogVisible = true
-      this.dialogImageUrl = this.src
+      this.dialogImageUrl = this.formaturl(this.src)
     },
     async handleRemove(opt, fileList) {
       this.$emit('uploadImage', [this.item.prop, ''])

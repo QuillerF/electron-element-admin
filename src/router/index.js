@@ -164,19 +164,19 @@ export const asyncRoutes = [
         name: '查看居民信息',
         hidden: true,
         meta: { title: '查看居民信息' }
+      },
+      {
+        path: 'export-selected-excel',
+        component: () => import('@/views/excel/select-excel'),
+        name: 'SelectExcel',
+        meta: { title: '变动记录' }
+      },
+      {
+        path: 'upload-excel',
+        component: () => import('@/views/excel/upload-excel'),
+        name: 'UploadExcel',
+        meta: { title: '批量导入' }
       }
-      // {
-      //   path: 'export-selected-excel',
-      //   component: () => import('@/views/excel/select-excel'),
-      //   name: 'SelectExcel',
-      //   meta: { title: '变动记录' }
-      // },
-      // {
-      //   path: 'upload-excel',
-      //   component: () => import('@/views/excel/upload-excel'),
-      //   name: 'UploadExcel',
-      //   meta: { title: '批量导入' }
-      // }
     ]
   },
   {

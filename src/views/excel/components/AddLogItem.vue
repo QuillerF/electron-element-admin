@@ -82,7 +82,7 @@ export default {
       this.textarea = val
       this.date = val
       this.select = val
-      this.$emit('change', [this.item.prop, val])
+      // this.$emit('change', [this.item.prop, val])
     }
   },
   created() {
@@ -91,6 +91,9 @@ export default {
   methods: {
     valueChange(val) {
       this.$emit('change', [this.item.prop, val])
+      if (this.item.prop === 'isMoveIn' && val === '否') {
+        this.$emit('change', ['moveInReason', ''])
+      }
     },
     formatSelect() {
       this.select = ''
