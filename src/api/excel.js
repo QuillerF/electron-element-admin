@@ -1,33 +1,6 @@
 import request from '@/utils/request'
 
 /**
- * 添加多个居民
- * @param {*}
-		"gender": "",
-		"groupId": "",
-		"groupName": "",
-		"hhRegistryNo": "",
-		"hhRelation": "",
-		"houseHolderName": "",
-		"id": "",
-		"idCardNo": "",
-		"name": "",
-		"phone": "" 参数
- * @param {*} nickname 参数
- * @param {*} phone 参数
- * @param {*} roleId 参数
- * @param {*} username 参数
- */
-
-export function VILLAGER_MANAGER_ADD_BATCH(data) {
-  return request({
-    url: 'villager/manager/add-batch',
-    method: 'post',
-    data
-  })
-}
-
-/**
  * 添加单个
  * 	"birthday": "",
 	"education": "",
@@ -301,6 +274,107 @@ export function APPROVE_DELETE(approveId) {
   })
 }
 
+/**
+ * 添加多个居民
+	"[
+	{
+		"gender": "",
+		"groupId": "",
+		"hhRegistryNo": "",
+		"hhRelation": "",
+		"houseHolderName": "",
+		"id": "",
+		"idCardNo": "",
+		"name": "",
+		"phone": ""
+	}
+]
+ */
+export function VILLAGER_MANAGER_ADD_BATCH(data) {
+  return request({
+    url: 'villager/manager/add-batch',
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * 变动记录列表
+{
+	"orderByRule": "",
+	"page": 0,
+	"searchName": "",
+	"size": 0
+}
+
+ */
+export function VILLAGER_MANAGER_VILLAGER_CHANGE_LIST(data) {
+  return request({
+    url: 'villager/manager/villager-change/list',
+    method: 'post',
+    data
+  })
+}
+/**
+ * 迁入
+{
+	"date": "",
+	"idCardNo": "",
+	"name": "",
+	"reason": "",
+	"remark": "",
+	"villagerId": ""
+}
+
+ */
+export function VILLAGER_MANAGER_VILLAGER_MOVE_IN(data) {
+  return request({
+    url: 'villager/manager/villager-change/move-in',
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * 迁出
+{
+	"date": "",
+	"idCardNo": "",
+	"name": "",
+	"reason": "",
+	"remark": "",
+	"villagerId": ""
+}
+
+ */
+export function VILLAGER_MANAGER_VILLAGER_MOVE_OUT(data) {
+  return request({
+    url: 'villager/manager/villager-change/move-out',
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * 注销
+{
+	"date": "",
+	"idCardNo": "",
+	"name": "",
+	"reason": "",
+	"remark": "",
+	"villagerId": ""
+}
+
+ */
+export function VILLAGER_MANAGER_VILLAGER_MOVE_OUT_FOREVER(data) {
+  return request({
+    url: 'villager/manager/villager-change/move-out-forever',
+    method: 'post',
+    data
+  })
+}
+
 export default {
   VILLAGER_MANAGER_UPDATE_ONE,
   VILLAGER_MANAGER_LIST,
@@ -312,5 +386,9 @@ export default {
   APPROVE_HANDLE,
   APPROVE_DETAIL,
   APPROVE_CANCEL,
-  APPROVE_DELETE
+  APPROVE_DELETE,
+  VILLAGER_MANAGER_VILLAGER_CHANGE_LIST,
+  VILLAGER_MANAGER_VILLAGER_MOVE_OUT_FOREVER,
+  VILLAGER_MANAGER_VILLAGER_MOVE_OUT,
+  VILLAGER_MANAGER_VILLAGER_MOVE_IN
 }

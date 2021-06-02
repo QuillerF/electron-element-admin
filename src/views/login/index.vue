@@ -50,7 +50,9 @@
           </span>
         </el-form-item>
       </el-tooltip>
-
+      <!-- <div class="flex-ar mb20">
+        <el-checkbox v-model="isMember" @change="handeleMember">记住密码</el-checkbox>
+      </div> -->
       <el-button
         :loading="loading"
         type="primary"
@@ -68,9 +70,10 @@ export default {
   name: 'Login',
   data() {
     return {
+      isMember: false,
       loginForm: {
-        username: 'root',
-        password: '123456'
+        username: '',
+        password: ''
       },
       loginRules: {
         username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
@@ -97,6 +100,7 @@ export default {
     }
   },
   created() {
+    // localStorage.getItem('loginform')
     // window.addEventListener('storage', this.afterQRScan)
   },
   mounted() {

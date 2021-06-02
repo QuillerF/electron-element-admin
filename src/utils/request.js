@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
+import router from 'vue-router'
 import { getToken } from '@/utils/auth'
 
 // 删除空参数
@@ -81,6 +82,10 @@ service.interceptors.response.use(
       return Promise.reject(new Error(res.message || 'Error'))
     } else {
       const { status } = res
+      // if (status === 401) {
+      //   store.dispatch('user/logout')
+      //   router.push(`/login?redirect=${this.$route.fullPath}`)
+      // } else
       if (status !== 0) {
         Message({
           message: res.msg || 'Error',

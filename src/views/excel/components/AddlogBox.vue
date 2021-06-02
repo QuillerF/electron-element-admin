@@ -4,10 +4,10 @@
     <div v-if="viewType === 'view'" class="mask"></div>
     <!-- <div v-if="viewType === 'view'" class="flex-ar mb20"> -->
     <el-form ref="form" :model="form" :rules="rules" label-width="200px" :inline="true" size="mini">
-      <div v-if="isApply">
+      <div v-if="isApply" class="approvestatus">
         <h3>审核情况</h3>
         <el-form-item label="审核状态:">
-          <span>{{ getApproveStatus }}</span>
+          <el-tag :type="detail.approveStatus === 3 ? 'danger' : ''" effect="plain">{{ getApproveStatus }}</el-tag>
         </el-form-item>
         <el-form-item label="操作类型:">
           <span>{{ detail.operationType }}</span>
@@ -257,6 +257,7 @@ export default {
             message: '修改成功',
             type: 'success'
           })
+          this.$emit('close')
         }
       })
     },
@@ -327,5 +328,10 @@ export default {
 }
 h3 {
   padding-left: 200px;
+}
+.approvestatus {
+  background: #fdf6ec;
+  border-radius: 4px;
+  padding-top: 15px;
 }
 </style>

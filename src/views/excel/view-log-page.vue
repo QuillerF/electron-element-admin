@@ -3,12 +3,21 @@
   <div>
     <div class="flex-ar mb20 mt20">
       <el-button type="primary" size="mini" class="mr20" @click="toEdit">修改</el-button>
-      <el-button type="primary" size="mini" class="mr20" @click="toOut">迁出</el-button>
-      <el-button type="warning" size="mini" class="mr20" @click="toCancel">注销</el-button>
+      <el-button
+        v-show="detail.isMoveIn === '否'"
+        v-permission="['super-admin', 'admin']"
+        type="primary"
+        size="mini"
+        class="mr20"
+        @click="handleMove('in')"
+        >迁入</el-button
+      >
+      <el-button type="primary" size="mini" class="mr20" @click="handleMove('out')">迁出</el-button>
+      <el-button type="warning" size="mini" class="mr20" @click="handleMove('cancel')">注销</el-button>
       <el-button type="danger" size="mini" class="mr20" @click="toDelete(detail)">删除</el-button>
     </div>
-    <AddlogBox :detail="detail" :other-family="otherFamily" :view-type="viewType"></AddlogBox>
-    <moveoutDialog ref="move"></moveoutDialog>
+    <AddlogBox :detail="detail" :other-family="otherFamily" :view-type="viewType" @close="closeSelectedTag"></AddlogBox>
+    <moveoutDialog ref="move" @close="closeSelectedTag"></moveoutDialog>
   </div>
 </template>
 
@@ -54,29 +63,8 @@ export default {
     toEdit() {
       this.$router.push({ path: '/excel/editlog', query: { id: this.detail.id, viewType: 'edit' } })
     },
-    toOut() {
-      this.$refs.move.openDialog('out')
-      // this.$confirm('确认迁出此信息吗?', '提示', {
-      //   confirmButtonText: '确认',
-      //   cancelButtonText: '取消',
-      //   type: 'warning'
-      // })
-      //   .then(() => {
-      //     console.log('迁出')
-      //   })
-      //   .catch(() => {})
-    },
-    toCancel() {
-      this.$refs.move.openDialog('cancel')
-      // this.$confirm('确认注销此信息吗?', '提示', {
-      //   confirmButtonText: '确认',
-      //   cancelButtonText: '取消',
-      //   type: 'warning'
-      // })
-      //   .then(() => {
-      //     console.log('注销')
-      //   })
-      //   .catch(() => {})
+    handleMove(type) {
+      this.$refs.move.openDialog(type, this.detail)
     },
     closeSelectedTag() {
       const view = this.$route

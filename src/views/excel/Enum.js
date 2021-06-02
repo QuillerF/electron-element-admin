@@ -27,7 +27,8 @@ const Columns = [
     label: '身份证号',
     prop: 'idCardNo',
     isDefaultShow: true,
-    addtype: 'text'
+    addtype: 'text',
+    rules: [{ pattern: /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/, message: '身份证号格式错误', trigger: 'blur' }]
   },
 
   {
@@ -280,7 +281,7 @@ const ChangeLogsColumns = [
   },
   {
     label: '操作人',
-    prop: 'user'
+    prop: 'createdByName'
   },
   {
     label: '备注',

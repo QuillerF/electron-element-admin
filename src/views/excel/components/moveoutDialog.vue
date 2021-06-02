@@ -1,10 +1,10 @@
 <!-- 迁出弹窗 -->
 <template>
-  <el-dialog :title="type === 'out' ? '迁出群众' : '注销群众'" :visible.sync="visible" center width="400px">
+  <el-dialog :title="`${getTitle}群众`" :visible.sync="visible" center width="400px">
     <el-form ref="form" :model="form" :rules="rules" label-width="80px" size="mini" :inline="false">
-      <el-form-item :label="type === 'out' ? '迁出原因' : '注销原因'" prop="reason">
-        <el-select v-model="form.reason" value-key="" placeholder="" style="width:220px" clearable filterable>
-          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value || item.label">
+      <el-form-item :label="`${getTitle}原因`" prop="reason">
+        <el-select v-model="form.reason" placeholder="" style="width:220px" clearable filterable>
+          <el-option v-for="item in getOptions" :key="item.label" :label="item.label" :value="item.value || item.label">
           </el-option>
         </el-select>
       </el-form-item>
@@ -35,6 +35,7 @@
 
 <script>
 import { cloneDeep } from 'lodash'
+import Excel from '@/api/excel'
 
 export default {
   components: {},
@@ -44,8 +45,11 @@ export default {
       visible: false,
       type: 'out', // out cancel
       form: {
-        reason: '',
+        villagerId: '',
+        idCardNo: '',
+        name: '',
         date: '',
+        reason: '',
         remark: ''
       },
       rules: {
@@ -59,17 +63,73 @@ export default {
       ]
     }
   },
-  computed: {},
+  computed: {
+    getTitle() {
+      const obj = {
+        out: '迁出',
+        in: '迁入',
+        cancel: '注销'
+      }
+      return obj[this.type]
+    },
+    getOptions() {
+      switch (this.type) {
+        case 'in':
+          return [{ label: '嫁娶' }, { label: '收留' }]
+        case 'cancel':
+          return [{ label: '死亡' }]
+        default:
+          return [{ label: '求学' }, { label: '嫁娶' }]
+      }
+    }
+  },
   watch: {},
   created() {},
   methods: {
-    openDialog(type) {
+    openDialog(type, detail = {}) {
       this.type = type
+      this.form.villagerId = detail.id
+      this.form.idCardNo = detail.idCardNo || ''
+      this.form.name = detail.name
+      this.form.date = ''
+      this.form.reason = ''
+      this.form.remark = ''
       this.visible = true
+      this.$nextTick(() => {
+        this.$refs.form.clearValidate()
+      })
     },
     submit() {
       this.$refs.form.validate(async bool => {
         if (bool) {
+          switch (this.type) {
+            case 'in':
+              await Excel.VILLAGER_MANAGER_VILLAGER_MOVE_IN(this.form)
+              this.$message({
+                message: '操作成功',
+                type: 'success'
+              })
+              break
+            case 'out':
+              await Excel.VILLAGER_MANAGER_VILLAGER_MOVE_OUT(this.form)
+              this.$message({
+                message: '操作成功',
+                type: 'success'
+              })
+              break
+            case 'cancel':
+              await Excel.VILLAGER_MANAGER_VILLAGER_MOVE_OUT_FOREVER(this.form)
+              this.$message({
+                message: '操作成功',
+                type: 'success'
+              })
+              break
+            default:
+              console.log('error')
+              break
+          }
+          this.visible = false
+          this.$emit('close')
           console.log('submit')
         }
       })

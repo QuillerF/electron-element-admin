@@ -1,11 +1,11 @@
 <template>
   <div class="app-container">
     <div class="flex-ar mb20">
-      <el-select v-model="params.sort" placeholder="" class="mr20" style="width:250px" clearable>
-        <el-option label="时间倒序" value="时间倒序"> </el-option>
-        <el-option label="时间正序" value="时间正序"> </el-option>
+      <el-select v-model="params.orderByRule" placeholder="" class="mr20" style="width:250px">
+        <el-option label="创建时间倒序" value="desc"> </el-option>
+        <el-option label="创建时间正序" value="asc"> </el-option>
       </el-select>
-      <el-select v-model="params.type" placeholder="变动类型" class="mr20" style="width:250px" clearable>
+      <el-select v-model="params.changeType" placeholder="变动类型" class="mr20" style="width:250px" clearable>
         <el-option value="迁入"> </el-option>
         <el-option value="迁出"> </el-option>
         <el-option value="注销"> </el-option>
@@ -18,14 +18,14 @@
         class="mr20"
       ></el-date-picker>
       <el-input
-        v-model="params.name"
+        v-model="params.searchName"
         prefix-icon="el-icon-search"
         class="mr20"
         placeholder="姓名"
         style="width:300px"
         clearable
       ></el-input>
-      <el-button type="primary" icon="el-icon-search" class="mr20" @click="fetchData">搜索</el-button>
+      <el-button type="primary" icon="el-icon-search" class="mr20" @click="fetchDataDebounce">搜索</el-button>
     </div>
     <el-table
       ref="table"
@@ -40,10 +40,10 @@
     >
       <el-table-column align="center" fixed label="序号" width="95">
         <template slot-scope="scope">
-          {{ scope.$index }}
+          {{ scope.$index + 1 }}
         </template>
       </el-table-column>
-      <el-table-column label="姓名" align="center" fixed prop="title"> </el-table-column>
+      <el-table-column label="姓名" align="center" fixed prop="name"> </el-table-column>
       <el-table-column
         v-for="fruit in columns"
         :key="fruit.prop"
@@ -52,27 +52,29 @@
         align="center"
       >
       </el-table-column>
-      <el-table-column align="center" fixed="right" label="操作" width="200">
+      <el-table-column :formatter="formatTime" label="创建时间" align="center" prop="createdAt"> </el-table-column>
+      <!-- <el-table-column align="center" fixed="right" label="操作" width="200">
         <template slot-scope="scope">
           <el-button type="text" size="default" @click="toDelete(scope.row)">删除</el-button>
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
     <Pagination
       v-show="total > 0"
       :total="total"
       :page.sync="params.page"
-      :limit.sync="params.limit"
-      @pagination="fetchData"
+      :limit.sync="params.size"
+      @pagination="fetchDataDebounce"
     />
   </div>
 </template>
 
 <script>
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
-import { fetchList } from '@/api/article'
-import { parseTime } from '@/utils'
+import Excel from '@/api/excel'
+import { debounce, parseTime } from '@/utils'
 import { ChangeLogsColumns } from './Enum'
+import dayjs from 'dayjs'
 
 export default {
   name: 'ExportExcel',
@@ -81,7 +83,7 @@ export default {
     return {
       columns: ChangeLogsColumns,
       list: null,
-      total: 10,
+      total: 0,
       listLoading: true,
       downloadLoading: false,
       filename: '',
@@ -90,18 +92,27 @@ export default {
       isShowSetColumn: false,
       daterange: [],
       params: {
+        orderByRule: 'desc',
+        changeType: '',
+        startDate: '',
+        endDate: '',
         page: 1,
-        limit: 50,
-        sort: '时间倒序',
-        type: '',
-        name: ''
-      }
+        searchName: '',
+        size: 50
+      },
+      fetchDataDebounce: debounce(this.fetchData, 300)
     }
   },
   created() {
-    this.fetchData()
+    this.fetchDataDebounce()
+  },
+  activated() {
+    this.fetchDataDebounce()
   },
   methods: {
+    formatTime(row, col, value) {
+      return dayjs(value).format('YYYY-MM-DD HH:mm')
+    },
     toDelete() {
       this.$confirm('确认删除该条信息吗?', '提示', {
         confirmButtonText: '确认',
@@ -132,8 +143,12 @@ export default {
     async fetchData() {
       try {
         this.listLoading = true
-        const res = await fetchList()
-        this.list = res.data.items
+        const [start, end] = this.daterange || []
+        this.params.startDate = start
+        this.params.endDate = end
+        const { data, total } = await Excel.VILLAGER_MANAGER_VILLAGER_CHANGE_LIST(this.params)
+        this.list = data
+        this.total = total
         this.listLoading = false
       } catch (error) {
         this.listLoading = false
